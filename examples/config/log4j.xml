@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+
+    Copyright (C) 2002-2012 "SYSNET International, Inc."
+    support@sysnetint.com [http://www.sysnetint.com]
+
+    This file is part of OpenEMPI.
+
+    OpenEMPI is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%p - %C.%M(%L) | %m%n"/>
+        </layout>
+    </appender>
+
+    <logger name="net.sf.ehcache">
+        <level value="ERROR"/>
+    </logger>
+
+    <!-- Suppress success logging from InteractiveAuthenticationSuccessEvent -->
+    <logger name="org.springframework.security">
+        <level value="ERROR"/>
+    </logger>
+
+    <logger name="org.apache">
+        <level value="WARN"/>
+    </logger>
+
+    <logger name="org.apache.velocity">
+        <level value="FATAL"/>
+    </logger>
+
+    <logger name="org.hibernate">
+        <level value="WARN"/>
+    </logger>
+        <logger name="org.hibernate.connection">
+        <level value="WARN"/>
+    </logger>
+  
+    <logger name="org.hibernate.SQL">
+        <level value="DEBUG"/>
+    </logger>
+
+    <logger name="org.hibernate.transaction">
+        <level value="WARN"/>
+    </logger>
+    
+    <logger name="org.springframework">
+        <level value="ERROR"/>
+    </logger>
+        
+    <logger name="org.springframework.transaction">
+        <level value="WARN"/>
+    </logger>
+     
+     <logger name="com.ethercis.ehr.archetype">
+        <level value="DEBUG"/>
+    </logger>  
+     
+     <logger name="com.ethercis.ehr.generator">
+        <level value="DEBUG"/>
+    </logger>     
+    
+      <logger name="com.ethercis.ehr.binding">
+        <level value="DEBUG"/>
+    </logger>
+     <logger name="org.openehr">
+        <level value="WARN"/>
+    </logger>
+    <logger name="com.ethercis.persistence.ResourceService">
+		<level value="DEBUG"/>
+    </logger>
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</log4j:configuration>
