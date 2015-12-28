@@ -70,5 +70,5 @@ In this section you will find:
 - [examples](https://github.com/ethercis/ethercis/tree/master/examples) scripts and configuration files to run ethercis on a Linux box. Scripts can be adapted to launch the server on  Windows if required.
 - [libraries](https://github.com/ethercis/ethercis/tree/master/libraries) some pre-compiled libraries to make life a bit easier (mostly xml bindings classes and one to avoid conflicts with the patches from the core module
 - [installation](https://github.com/ethercis/ethercis/tree/master/installation) documentation and readme's, mostly to install a system
-
+- [REST API](https://github.com/ethercis/ethercis/blob/master/doc/rest%20api.md) and [FLAT JSON] (https://github.com/ethercis/ethercis/blob/master/doc/flat%20json.md)
  
