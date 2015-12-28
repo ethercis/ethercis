@@ -71,4 +71,5 @@ In this section you will find:
 - [libraries](https://github.com/ethercis/ethercis/tree/master/libraries) some pre-compiled libraries to make life a bit easier (mostly xml bindings classes and one to avoid conflicts with the patches from the core module
 - [installation](https://github.com/ethercis/ethercis/tree/master/installation) documentation and readme's, mostly to install a system
 - [REST API](https://github.com/ethercis/ethercis/blob/master/doc/rest%20api.md) and [FLAT JSON] (https://github.com/ethercis/ethercis/blob/master/doc/flat%20json.md)
+- [Composition Serialization and Query](https://github.com/ethercis/ethercis/blob/master/doc/serialization.md)
  
