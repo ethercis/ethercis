@@ -1,5 +1,46 @@
 #FLAT JSON
 
+EtherCIS supports two flat json format
+
+- ECISFLAT: which is the native *understanding* of FLAT JSON based on AQL path. Since EtherCIS relies on RM object representation (in particular Composition), the parsing of flatten json key value pairs is efficient.
+- FLAT: this is Marand's flat json format as described in the [Overview of openEHR and Ehrscape](https://github.com/handihealth/c4h_sits/blob/master/docs/general/openehr_intro.md). 
+
+##FLAT
+
+Marand's flat json is based on key value pairs (more precisely path/value) where the path expression is based on node names and array indexes. For example:
+
+	{
+	  "laboratory_order/_uid": "23d69330-7790-4394-8abc-1455681f6ffa::ydh.code4health.com::1",
+	  "laboratory_order/language|code": "en",
+	  "laboratory_order/language|terminology": "ISO_639-1",
+	  "laboratory_order/territory|code": "GB",
+	  "laboratory_order/territory|terminology": "ISO_3166-1",
+	  "laboratory_order/context/_health_care_facility|id": "999999-345",
+	  "laboratory_order/context/_health_care_facility|id_scheme": "2.16.840.1.113883.2.1.4.3",
+	  "laboratory_order/context/_health_care_facility|id_namespace": "NHS-UK",
+	  "laboratory_order/context/_health_care_facility|name": "Northumbria Community NHS",
+	  "laboratory_order/context/setting|terminology": "openehr",
+	  "laboratory_order/laboratory_test_request/_uid": "b8c17799-457d-4583-8d85-c369dffacc21",
+	  "laboratory_order/laboratory_test_request/lab_request/service_requested|code": "444164000",
+	  "laboratory_order/laboratory_test_request/lab_request/service_requested|value": "Urea, electrolytes and creatinine measurement",
+	  "laboratory_order/laboratory_test_request/lab_request/service_requested|terminology": "SNOMED-CT",
+	  "laboratory_order/laboratory_test_request/lab_request/timing": "R5/2015-04-10T00:19:00+02:00/P2M",
+	  "laboratory_order/laboratory_test_request/lab_request/timing|formalism": "timing",
+	  "laboratory_order/laboratory_test_request/narrative": "Urea, electrolytes and creatinine measurement",
+	  "laboratory_order/laboratory_test_request/language|code": "en",
+	  "laboratory_order/laboratory_test_tracker/time": "2015-04-10T00:19:02.518+02:00",
+	  "laboratory_order/laboratory_test_tracker/language|code": "en",
+	  "laboratory_order/laboratory_test_tracker/language|terminology": "ISO_639-1",
+	  "laboratory_order/laboratory_test_tracker/encoding|code": "UTF-8",
+	  "laboratory_order/laboratory_test_tracker/encoding|terminology": "IANA_character-sets",
+	  "laboratory_order/composer|name": "Dr Joyce Smith",
+	  "ctx/language": "en",
+	  "ctx/territory": "GB"
+	}
+ 
+This flat json format is easy to read and interpret by a human operator, but it cannot be directly identified by Ocean's modeling tools.
+
+##ECISFLAT
 The flat json format currently supported by Ethercis is a simple Path/Value representation of data in a Composition.
 
 For example, a flat json data block is
@@ -30,8 +71,7 @@ For example, a flat json data block is
 
 
 
-Paths
--
+###Paths
 
 The path expression is directly issued from the [template designer](http://www.openehr.org/downloads/modellingtools) or a CKM like [openEHR UK CKM](http://www.clinicalmodels.org.uk/ckm/). For the latter select 'Show Path' option when displaying a template.
 
@@ -43,8 +83,7 @@ NB. In a flat json block, path expressions consist of several sections:
 - **a number of composition attributes** to specify: category, language etc
 - **/content** the set of entries (care entries, section, admin entry etc.) 
 
-Values
--
+###Values
 The syntaxt for encoding of OpenEHR data values follow several conventions depending on the type, see: [Data Types Specification](http://www.openehr.org/releases/1.0.2/architecture/rm/data_types_im.pdf) for more details
 
 
