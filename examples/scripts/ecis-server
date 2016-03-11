@@ -3,6 +3,7 @@
 # processname: ecis-server
 #
 # SCRIPT created 15-10-2015, CCH
+# updated: CHC, 10-03-2016
 #-----------------------------------------------------------------------------------
 UNAME=`uname`
 HOSTNAME=`hostname`
@@ -76,7 +77,12 @@ ${SYSLIB}/postgresql-9.4-1204.jdbc42.jar:\
 ${SYSLIB}/dom4j-1.6.1.jar:\
 ${SYSLIB}/jetty-servlet-9.2.10.v20150310.jar:\
 ${SYSLIB}/thinkehr-framework-jsonlib-2.3.0-JL32.jar:\
-${SYSLIB}/gson-jodatime-serialisers-1.2.0.jar
+${SYSLIB}/gson-jodatime-serialisers-1.2.0.jar:\
+${SYSLIB}/jackson-annotations-2.7.0.jar:\
+${SYSLIB}/jackson-databind-2.7.2.jar:\
+${SYSLIB}/jackson-core-2.7.2.jar:\
+${SYSLIB}/jackson-datatype-joda-2.7.2.jar:\
+${SYSLIB}/joda-time-2.4.jar
 
 
 # launch server
