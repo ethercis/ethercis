@@ -38,7 +38,8 @@ The following are suggestions to deploy an ethercis server instance. I am assumi
 	
 	/opt/ecis/bin <- scripts and utilities
 	/opt/ecis/lib <- all jars required to run the server instance
-
+	/opt/ecis/lib/application <- application specific libraries (bundled with Maven dependencies)
+	/opt/ecis/lib/system <- a number of unbundled libraries used to run the server
 	/etc/opt/ecis/ <- property files (ethercis, log4j, logging)
 	/etc/opt/ecis/knowledge/archetypes
 	/etc/opt/ecis/knowledge/templates
@@ -46,6 +47,9 @@ The following are suggestions to deploy an ethercis server instance. I am assumi
 	/etc/opt/ecis/security <- f.e. authenticate.ini should be located there
 
 	/var/opt/ecis/ <- should contains the log files
+
+##Libraries
+Required libraries used to deploy a server instance are located in [ethercis/libraries](https://github.com/ethercis/ethercis/tree/master/libraries). The library repositories follow the convention used to deploy the server (e.g. applib and syslib)
 	
 
 
