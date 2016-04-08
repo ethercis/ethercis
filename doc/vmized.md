@@ -282,6 +282,10 @@ Copy libraries, templates, bin, scripts, configuration examples and authenticati
 
 Check for bash path (ex. 'which bash') and change script header accordingly
 
+Set the local hostname or IP address in the server launch script ethercis-server
+
+	export SERVER_HOST=<your hostname or IP address> # the network address to bind to
+
 ###Run Ethercis server
 
 	#/opt/ecis/bin/ecis-server start
@@ -290,7 +294,11 @@ Check for bash path (ex. 'which bash') and change script header accordingly
 
 The server should not use a DHCP generated IP address, make sure your guest VM uses a fixed address!
 
-add the local hostname with its corresponding address in /etc/hosts, for example:
+Check the local hostname and/or IP address
+
+	ifconfig -a
+
+If not done yet, add or change the local hostname with its corresponding address in /etc/hosts, for example:
 
 	192.168.100.3   ethercis-vm.ethercis.com ethercis-vm
 
