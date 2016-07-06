@@ -285,6 +285,9 @@ Check for bash path (ex. 'which bash') and change script header accordingly
 Set the local hostname or IP address in the server launch script ethercis-server
 
 	export SERVER_HOST=<your hostname or IP address> # the network address to bind to
+or
+
+	export SERVER_HOST=`hostname` #if hostname resolves to a valid IP address (see below)
 
 ###Run Ethercis server
 

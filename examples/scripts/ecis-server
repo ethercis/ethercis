@@ -1,9 +1,22 @@
-#!/usr/bin/bash
+#!/bin/bash
+#
+# SCRIPT created July 2016, Christian Chevalley
 # description: Controls Ethercis Server
 # processname: ecis-server
 #
-# SCRIPT created 15-10-2015, CCH
-# updated: CHC, 10-03-2016
+# usage: 
+# ./ecis-server start|stop|restart
+# ./ecis-server clean -> purge the temp log file
+#
+# This script assumes "uber" jars as defined in each respective module pom.xml
+# specific libraries are posted at:
+# ethercis/libraries
+#
+# For deployment in production, the following should be done:
+# 
+# - remove the stdout/stderr redirection
+# - remove java remote debugging (unsafe)
+# - set authentication on JMX
 #-----------------------------------------------------------------------------------
 UNAME=`uname`
 HOSTNAME=`hostname`
@@ -11,6 +24,7 @@ export ECIS_DEPLOY_BASE=/opt/ecis
 export SYSLIB=${ECIS_DEPLOY_BASE}/lib/system
 export COMMONLIB=${ECIS_DEPLOY_BASE}/lib/common
 export APPLIB=${ECIS_DEPLOY_BASE}/lib/application
+export LIB=${ECIS_DEPLOY_BASE}/lib/deploy
 
 # Mailer configuration
 ECIS_MAILER=echo
@@ -19,7 +33,7 @@ ECIS_MAILER=echo
 # NB: EtherCIS requires java 8
 if [ :${UNAME}: = :Linux: ];
 then
-  JAVA_HOME=/opt/jdk1.8.0_60/jre
+  JAVA_HOME=/usr/java/jdk1.8.0_74/jre
 fi
 if [ :${UNAME}: = :SunOS: ];
 then
@@ -36,7 +50,7 @@ export RUNTIME_ETC=/etc/opt/ecis
 export RUNTIME_LOG=/var/opt/ecis
 export RUNTIME_DIALECT=EHRSCAPE  #specifies the query dialect used in HTTP requests (REST)
 export SERVER_PORT=8080 # the port address to bind to
-export SERVER_HOST=188.166.246.78 # the network address to bind to
+export SERVER_HOST=`hostname` # the network address to bind to
 
 export MAILER_CONF=${RUNTIME_ETC}/xcmail.cf
 
@@ -50,40 +64,26 @@ export JOOQ_DB_PASSWORD=postgres
 
 CLASSPATH=./:\
 ${JAVA_HOME}/lib:\
-${APPLIB}/ecis-core.jar:\
-${APPLIB}/ecis-knowledge-cache.jar:\
-${APPLIB}/ecis-ehrdao.jar:\
-${APPLIB}/ecis-servicemanager.jar:\
-${APPLIB}/ecis-authenticateservice.jar:\
-${APPLIB}/ecis-cacheknowledgeservice.jar:\
-${APPLIB}/ecis-logonservice.jar:\
-${APPLIB}/ecis-resourceaccessservice.jar:\
-${APPLIB}/ecis-compositionservice.jar:\
-${APPLIB}/ecis-partyidentifiedservice.jar:\
-${APPLIB}/ecis-systemservice.jar:\
-${APPLIB}/ecis-ehrservice.jar:\
-${APPLIB}/ecis-vehrservice.jar:\
+${LIB}/ecis-core-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-knowledge-cache-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-ehrdao-1.1.0-SNAPSHOT.jar:\
+${LIB}/jooq-pg-1.1.0-SNAPSHOT.jar:\
+${LIB}/aql-processor-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-servicemanager-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-authenticate-service-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-knowledge-service-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-logon-service-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-resource-access-service-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-composition-service-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-partyidentified-service-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-system-service-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-ehr-service-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-vehr-service-1.1.0-SNAPSHOT.jar:\
 ${APPLIB}/ehrxml.jar:\
 ${APPLIB}/oet-parser.jar:\
 ${APPLIB}/ecis-openehr.jar:\
 ${APPLIB}/types.jar:\
-${APPLIB}/adl-parser-1.0.9.jar:\
-${SYSLIB}/fst-2.40-onejar.jar:\
-${SYSLIB}/jersey-json-1.19.jar:\
-${SYSLIB}/gson-2.4.jar:\
-${SYSLIB}/commons-collections4-4.0.jar:\
-${SYSLIB}/jooq-3.5.3.jar:\
-${SYSLIB}/postgresql-9.4-1204.jdbc42.jar:\
-${SYSLIB}/dom4j-1.6.1.jar:\
-${SYSLIB}/jetty-servlet-9.2.10.v20150310.jar:\
-${SYSLIB}/thinkehr-framework-jsonlib-2.3.0-JL32.jar:\
-${SYSLIB}/gson-jodatime-serialisers-1.2.0.jar:\
-${SYSLIB}/jackson-annotations-2.7.0.jar:\
-${SYSLIB}/jackson-databind-2.7.2.jar:\
-${SYSLIB}/jackson-core-2.7.2.jar:\
-${SYSLIB}/jackson-datatype-joda-2.7.2.jar:\
-${SYSLIB}/joda-time-2.4.jar
-
+${APPLIB}/adl-parser-1.0.9.jar
 
 # launch server
 # ecis server is run as user ethercis
@@ -92,7 +92,6 @@ case "$1" in
   start)
     echo "ethercis startup"
      ( ${ECIS_MAILER} ${MAILER_CONF} "EtherCIS Startup" "Manual invocation of server startup" > /dev/null )&
-    echo ${CLASSPATH}
     (
 	${JVM} \
 	-Xmx256M \
@@ -105,25 +104,26 @@ case "$1" in
 	-Xrunjdwp:transport=dt_socket,address=8000,suspend=n,server=y \
 	-Djava.util.logging.config.file=${RUNTIME_ETC}/logging.properties \
 	-Dlog4j.configuration=file:${RUNTIME_ETC}/log4j.xml \
+	-Djava.net.preferIPv4Stack=true \
 	-Djava.awt.headless=true \
 	-Djdbc.drivers=org.postgresql.Driver \
-    -Dserver.node.name=testsg.ethercis.org \
+    	-Dserver.node.name=vm01.ethercis.org \
 	-Dcom.sun.management.jmxremote \
 	-Dcom.sun.management.jmxremote.port=8999 \
-    -Dcom.sun.management.jmxremote.local.only=false \
+    	-Dcom.sun.management.jmxremote.local.only=false \
 	-Dcom.sun.management.jmxremote.ssl=false \
 	-Dcom.sun.management.jmxremote.authenticate=false \
-    -Dfile.encoding=UTF-8 \
-    -Djava.rmi.server.hostname=${SERVER_HOST} \
+    	-Dfile.encoding=UTF-8 \
+    	-Djava.rmi.server.hostname=${SERVER_HOST} \
 	-Djooq.dialect=${JOOQ_DIALECT} \
 	-Djooq.url=${JOOQ_URL} \
 	-Djooq.login=${JOOQ_DB_LOGIN} \
 	-Djooq.password=${JOOQ_DB_PASSWORD} \
 	-Druntime.etc=${RUNTIME_ETC} \
 	 com.ethercis.vehr.Launcher \
-	-propertyFile ${RUNTIME_ETC}/services.properties \
-    -server_host ${SERVER_HOST} \
-    -server_port 8080 \
+	-propertyFile /etc/opt/ecis/services.properties \
+    	-server_host ${SERVER_HOST} \
+    	-server_port 8080 \
  2>> ${RUNTIME_LOG}/ethercis_test.log >> ${RUNTIME_LOG}/ethercis_test.log &    )&
     ;;
   stop)

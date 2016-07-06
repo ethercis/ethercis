@@ -1,0 +1,7 @@
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file
+      -Dfile=/Development/thinkehr-framework-jsonlib-2.3.0-JL32/lib/thinkehr-framework-jsonlib-2.3.0-JL32.jar     
+      -DgroupId=org.openehr     
+      -DartifactId=thinkehr-framework-jsonlib     
+      -Dversion=2.3.0-JL32     
+      -Dpackaging=jar     
+      -DlocalRepositoryPath=/Development/Dropbox/eCIS_Development/eCIS-LIB/local-maven-repo

@@ -1,0 +1,82 @@
+#!/usr/bin/bash
+# EtherCIS 1.1.0
+# description: migrate a db 1.0 to the new json struct + containments
+#
+# SCRIPT created 17.06.2016, CCH
+#-----------------------------------------------------------------------------------
+UNAME=`uname`
+HOSTNAME=`hostname`
+export ECIS_DEPLOY_BASE=/opt/ecis
+export SYSLIB=${ECIS_DEPLOY_BASE}/lib/system
+export COMMONLIB=${ECIS_DEPLOY_BASE}/lib/common
+export APPLIB=${ECIS_DEPLOY_BASE}/lib/application
+
+# Mailer configuration
+ECIS_MAILER=echo
+
+# use the right jvm library depending on the OS
+# NB: EtherCIS requires java 8
+if [ :${UNAME}: = :Linux: ];
+then
+  JAVA_HOME=/opt/jdk1.8.0_60/jre
+fi
+if [ :${UNAME}: = :SunOS: ];
+then
+  JAVA_HOME=/jdk1.8.0_60/jre
+fi
+
+#force to use IPv4 so Jetty can bind to it instead of IPv6...
+export _JAVA_OPTIONS="-Djava.net.preferIPv4Stack=true"
+
+# runtime parameters
+export JVM=${JAVA_HOME}/bin/java
+export RUNTIME_HOME=/opt/ecis
+export RUNTIME_ETC=/etc/opt/ecis
+export RUNTIME_LOG=/var/opt/ecis
+export RUNTIME_DIALECT=EHRSCAPE  #specifies the query dialect used in HTTP requests (REST)
+export SERVER_PORT=8080 # the port address to bind to
+export SERVER_HOST=188.166.246.78 # the network address to bind to
+
+export MAILER_CONF=${RUNTIME_ETC}/xcmail.cf
+
+export JOOQ_DIALECT=POSTGRES
+JOOQ_DB_PORT=5432
+JOOQ_DB_HOST=localhost
+JOOQ_DB_SCHEMA=ethercis
+export JOOQ_URL=jdbc:postgresql://${JOOQ_DB_HOST}:${JOOQ_DB_PORT}/${JOOQ_DB_SCHEMA}
+export JOOQ_DB_LOGIN=postgres
+export JOOQ_DB_PASSWORD=postgres
+
+CLASSPATH=./:\
+${JAVA_HOME}/lib:\
+${APPLIB}/ecis-core.jar:\
+${APPLIB}/ecis-knowledge-cache.jar:\
+${APPLIB}/ecis-ehrdao.jar:\
+${APPLIB}/aql-processor.jar:\
+${APPLIB}/jooq-pg.jar:\
+${APPLIB}/ehrxml.jar:\
+${APPLIB}/oet-parser.jar:\
+${APPLIB}/ecis-openehr.jar:\
+${APPLIB}/types.jar:\
+${APPLIB}/adl-parser-1.0.9.jar:\
+${SYSLIB}/fst-2.40-onejar.jar:\
+${SYSLIB}/jersey-json-1.19.jar:\
+${SYSLIB}/gson-2.4.jar:\
+${SYSLIB}/commons-collections4-4.0.jar:\
+${SYSLIB}/jooq-3.5.3.jar:\
+${SYSLIB}/postgresql-9.4-1204.jdbc42.jar:\
+${SYSLIB}/dom4j-1.6.1.jar
+
+
+# launch migration
+${JVM} \
+	-cp ${CLASSPATH} \
+	com.ethercis.dao.access.util.MigrateEntry \
+	-ckm_archetype /etc/opt/ecis/knowledge/archetypes \
+	-ckm_template /etc/opt/ecis/knowledge/templates \
+	-ckm_opt /etc/opt/ecis/knowledge/operational_templates \
+    -port 5432 \
+	-all
+
+# end of file
+

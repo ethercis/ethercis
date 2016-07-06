@@ -1,7 +1,7 @@
 Generating jOOQ binding
 =======================
 
-Since I tend to forget a few things each time I change the DB structure (including launching a jOOQ binding re-creation!), here are some notes and stuff that need to be done for a successful binding generation. The following is for a Windows 7 based deployment using jOOQ 3.5.3
+Since I tend to forget a few things each time I change the DB structure (including launching a jOOQ binding re-creation!), here are some notes and stuff that need to be done for a successful binding generation. The following is for a Windows 7 based deployment using jOOQ 3.7.3
 
 In module ehrdao, a resources directory contains two important files 
 
@@ -22,7 +22,7 @@ Specify where jOOQ is installed on the local machine
 
 The version of jOOQ
 
-	JOOQ_VERSION=3.5.3
+	JOOQ_VERSION=3.7.3
 
 The JDBC driver to use to communicate with the DB
 
@@ -39,5 +39,7 @@ Set the communication parameters with the DB server instance.
 	   <password>postgres</password>
 	</jdbc>
 
+###TODO
+Add a maven jOOQ plugin in jooq-pg `pom.xml`
 
  
