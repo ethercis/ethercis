@@ -32,6 +32,33 @@ At this stage more benchmarking is required, but a dual cores 64 bits is recomme
 
 At least one NIC (!). Ethercis can run on a multi-homed system. Just specify the hostname you wish to bind to in the start up script. 
 
+Using the latest ecis-server script, the actual address is declared using the following statement 
+
+	HOSTNAME=`hostname`
+
+This can be a source of confusion if the DHCP client is activated on your host, that is the IP address is dynamically set by DHCP.
+
+Nevertheless, the IP address of the host should be specified in */etc/hosts*
+
+On CentOS, hostname is specified in file
+
+	/etc/sysconfig/network
+
+For example:
+
+	>cat /etc/sysconfig/network
+	NETWORKING=yes
+	HOSTNAME=ethercis-vm.ethercis.com
+	NTPSERVERARGS=iburst
+
+Then edit <code>/etc/hosts</code>
+
+	192.168.2.104 ethercis-vm.ethercis.com ethercis-vm
+
+EtherCIS should bind on this port 
+
+	INFO - com.ethercis.vehr.Launcher.start(140) | Server listening at:http://ethercis-vm.ethercis.com:8080/
+
 Directory Structure
 -------------------
 The following are suggestions to deploy an ethercis server instance. I am assuming the deployment is based on Linux (currently a test server is up and running on CentOS Linux 7)
