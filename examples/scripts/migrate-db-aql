@@ -1,71 +1,68 @@
 #!/usr/bin/bash
-# EtherCIS 1.1.0
+# ethercis 1.1.1
 # description: migrate a db 1.0 to the new json struct + containments
 #
-# SCRIPT created 17.06.2016, CCH
+# script created 17.06.2016, cch
+# rev September 2016, cch
 #-----------------------------------------------------------------------------------
-UNAME=`uname`
-HOSTNAME=`hostname`
-export ECIS_DEPLOY_BASE=/opt/ecis
-export SYSLIB=${ECIS_DEPLOY_BASE}/lib/system
-export COMMONLIB=${ECIS_DEPLOY_BASE}/lib/common
-export APPLIB=${ECIS_DEPLOY_BASE}/lib/application
+uname=`uname`
+hostname=`hostname`
+export ecis_deploy_base=/opt/ecis
+export syslib=${ecis_deploy_base}/lib/system
+export commonlib=${ecis_deploy_base}/lib/common
+export applib=${ecis_deploy_base}/lib/application
+export lib=${ecis_deploy_base}/lib/deploy
 
-# Mailer configuration
-ECIS_MAILER=echo
+# mailer configuration
+ecis_mailer=echo
 
-# use the right jvm library depending on the OS
-# NB: EtherCIS requires java 8
-if [ :${UNAME}: = :Linux: ];
+# use the right jvm library depending on the os
+# nb: ethercis requires java 8
+if [ :${uname}: = :linux: ];
 then
-  JAVA_HOME=/opt/jdk1.8.0_60/jre
+  java_home=/opt/jdk1.8.0_60/jre
 fi
-if [ :${UNAME}: = :SunOS: ];
+if [ :${uname}: = :sunos: ];
 then
-  JAVA_HOME=/jdk1.8.0_60/jre
+  java_home=/jdk1.8.0_60/jre
 fi
 
-#force to use IPv4 so Jetty can bind to it instead of IPv6...
-export _JAVA_OPTIONS="-Djava.net.preferIPv4Stack=true"
+#force to use ipv4 so jetty can bind to it instead of ipv6...
+export _java_options="-djava.net.preferipv4stack=true"
 
 # runtime parameters
-export JVM=${JAVA_HOME}/bin/java
-export RUNTIME_HOME=/opt/ecis
-export RUNTIME_ETC=/etc/opt/ecis
-export RUNTIME_LOG=/var/opt/ecis
-export RUNTIME_DIALECT=EHRSCAPE  #specifies the query dialect used in HTTP requests (REST)
-export SERVER_PORT=8080 # the port address to bind to
-export SERVER_HOST=188.166.246.78 # the network address to bind to
+export jvm=${java_home}/bin/java
+export runtime_home=/opt/ecis
+export runtime_etc=/etc/opt/ecis
+export runtime_log=/var/opt/ecis
+export runtime_dialect=ehrscape  #specifies the query dialect used in http requests (rest)
+export server_port=8080 # the port address to bind to
+export server_host=178.62.71.220 # the network address to bind to
 
-export MAILER_CONF=${RUNTIME_ETC}/xcmail.cf
+export mailer_conf=${runtime_etc}/xcmail.cf
 
-export JOOQ_DIALECT=POSTGRES
-JOOQ_DB_PORT=5432
-JOOQ_DB_HOST=localhost
-JOOQ_DB_SCHEMA=ethercis
-export JOOQ_URL=jdbc:postgresql://${JOOQ_DB_HOST}:${JOOQ_DB_PORT}/${JOOQ_DB_SCHEMA}
-export JOOQ_DB_LOGIN=postgres
-export JOOQ_DB_PASSWORD=postgres
+export jooq_dialect=postgres
+jooq_db_port=5432
+jooq_db_host=localhost
+jooq_db_schema=ethercis
+export jooq_url=jdbc:postgresql://${jooq_db_host}:${jooq_db_port}/${jooq_db_schema}
+export jooq_db_login=postgres
+export jooq_db_password=postgres
 
-CLASSPATH=./:\
-${JAVA_HOME}/lib:\
-${APPLIB}/ecis-core.jar:\
-${APPLIB}/ecis-knowledge-cache.jar:\
-${APPLIB}/ecis-ehrdao.jar:\
-${APPLIB}/aql-processor.jar:\
-${APPLIB}/jooq-pg.jar:\
+classpath=./:\
+${java_home}/lib:\
+${lib}/ecis-core-1.1.1-snapshot.jar:\
+${lib}/ecis-knowledge-cache-1.1.0-snapshot.jar:\
+${lib}/ecis-ehrdao-1.1.0-snapshot.jar:\
+${lib}/jooq-pg-1.1.0-snapshot.jar:\
+${lib}/aql-processor-1.1.0-snapshot.jar:\
+${lib}/ecis-validation-1.0-snapshot.jar:\
+${lib}/ecis-transform-1.0-snapshot.jar:\
 ${APPLIB}/ehrxml.jar:\
 ${APPLIB}/oet-parser.jar:\
 ${APPLIB}/ecis-openehr.jar:\
 ${APPLIB}/types.jar:\
 ${APPLIB}/adl-parser-1.0.9.jar:\
-${SYSLIB}/fst-2.40-onejar.jar:\
-${SYSLIB}/jersey-json-1.19.jar:\
-${SYSLIB}/gson-2.4.jar:\
-${SYSLIB}/commons-collections4-4.0.jar:\
-${SYSLIB}/jooq-3.5.3.jar:\
-${SYSLIB}/postgresql-9.4-1204.jdbc42.jar:\
-${SYSLIB}/dom4j-1.6.1.jar
 
 
 # launch migration
@@ -79,4 +76,5 @@ ${JVM} \
 	-all
 
 # end of file
+
 

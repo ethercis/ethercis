@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # SCRIPT created July 2016, Christian Chevalley
+# rev EtherCIS 1.1.1 September 2016
 # description: Controls Ethercis Server
 # processname: ecis-server
 #
@@ -64,11 +65,13 @@ export JOOQ_DB_PASSWORD=postgres
 
 CLASSPATH=./:\
 ${JAVA_HOME}/lib:\
-${LIB}/ecis-core-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-core-1.1.1-SNAPSHOT.jar:\
 ${LIB}/ecis-knowledge-cache-1.1.0-SNAPSHOT.jar:\
 ${LIB}/ecis-ehrdao-1.1.0-SNAPSHOT.jar:\
 ${LIB}/jooq-pg-1.1.0-SNAPSHOT.jar:\
 ${LIB}/aql-processor-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-validation-1.0-SNAPSHOT.jar:\
+${LIB}/ecis-transform-1.0-SNAPSHOT.jar:\
 ${LIB}/ecis-servicemanager-1.1.0-SNAPSHOT.jar:\
 ${LIB}/ecis-authenticate-service-1.1.0-SNAPSHOT.jar:\
 ${LIB}/ecis-knowledge-service-1.1.0-SNAPSHOT.jar:\
@@ -87,6 +90,17 @@ ${APPLIB}/adl-parser-1.0.9.jar
 
 # launch server
 # ecis server is run as user ethercis
+
+# add this to enable remote profiling with jProfiler
+#     -agentpath:/opt/jprofiler9/bin/linux-x64/libjprofilerti.so=port=8849 \
+
+# JMX stuff
+#	-Dcom.sun.management.jmxremote \
+#	-Dcom.sun.management.jmxremote.port=8999 \
+#    	-Dcom.sun.management.jmxremote.local.only=false \
+#	-Dcom.sun.management.jmxremote.ssl=false \
+#	-Dcom.sun.management.jmxremote.authenticate=false \
+
 su - ethercis << _ECIS
 case "$1" in
   start)
@@ -103,16 +117,11 @@ case "$1" in
 	-Xdebug \
 	-Xrunjdwp:transport=dt_socket,address=8000,suspend=n,server=y \
 	-Djava.util.logging.config.file=${RUNTIME_ETC}/logging.properties \
-	-Dlog4j.configuration=file:${RUNTIME_ETC}/log4j.xml \
+	-Dlog4j.configurationFile=file:${RUNTIME_ETC}/log4j.xml \
 	-Djava.net.preferIPv4Stack=true \
 	-Djava.awt.headless=true \
 	-Djdbc.drivers=org.postgresql.Driver \
     	-Dserver.node.name=vm01.ethercis.org \
-	-Dcom.sun.management.jmxremote \
-	-Dcom.sun.management.jmxremote.port=8999 \
-    	-Dcom.sun.management.jmxremote.local.only=false \
-	-Dcom.sun.management.jmxremote.ssl=false \
-	-Dcom.sun.management.jmxremote.authenticate=false \
     	-Dfile.encoding=UTF-8 \
     	-Djava.rmi.server.hostname=${SERVER_HOST} \
 	-Djooq.dialect=${JOOQ_DIALECT} \

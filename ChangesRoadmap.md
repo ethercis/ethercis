@@ -1,5 +1,29 @@
 Changes 
 ----
+#####Ethercis-1.1.1 (September 2016)
+This is a new snapshot version with a number of bug fixes and improvements:
+
+- Ehr status other_details (support input under RAW JSON format) including AQL queries
+- Cleaned up AQL grammar (Lexer problem is solved)
+- Support ARCHETYPEID in node predicate (AQL)
+- Slightly modified persisted entry (jsonb)
+- EtherCIS REST API can be configured to use Asynchronous queries
+- DB connections using connection pooling
+- Multiple bug fix and got rid of numerous NPEs...
+
+A utility (see in examples/scripts/migrate-db-aql) can be used to migrate a current DB to the new format
+
+See also examples/config/services.properties for connection pooling configuration
+
+	server.persistence.implementation=jooq_pg_pool
+
+The asynchronous query mode can be set in service.properties:
+
+	server.query.asynchronous=true
+	server.threadpoolsize=20
+	server.callback_timeout=10000
+
+
 #####Ethercis-1.1.1 (August 2016)
 - Supports validation
 
