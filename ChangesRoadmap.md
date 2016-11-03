@@ -7,7 +7,11 @@ New format supported for compositions: RAW json. Sould be specified in the query
 
 Queries (both SQL and AQL) can be passed in a POST
 
-Better databse connection pooling using DBCP2. Still investigating to support DB reconnect.
+Better databse connection pooling using DBCP2. DB auto reconnection is activated by setting 
+
+	server.persistence.dbcp2.test_on_borrow = true
+
+in the DBCP2 section of services.properties
 
 ######Fixed various issues
 
