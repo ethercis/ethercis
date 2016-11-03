@@ -1,4 +1,4 @@
--- Generate EtherCIS tables for PostgreSQL 9.4
+-- Generate EtherCIS tables for PostgreSQL 9.3
 -- Author: Christian Chevalley
 --
 --
@@ -8,7 +8,6 @@
 --
 --    alter table com.ethercis.ehr.consult_req_attachement
 --        drop constraint FKC199A3AA4204581F;
--- Rev 1.1 2/8/16 CCH
 --
 drop schema if exists ehr cascade;
 -- drop schema if exists common cascade;
@@ -301,6 +300,17 @@ create TABLE ehr.containment (
   path text
 );
 
+CREATE INDEX label_idx ON ehr.containment USING BTREE(label);
+CREATE INDEX comp_id_idx ON ehr.containment USING BTREE(comp_id);
+
+-- simple cross reference table to link INSTRUCTIONS with ACTIONS or other COMPOSITION
+CREATE TABLE ehr.compo_xref (
+  master_uuid UUID REFERENCES ehr.composition(id),
+  child_uuid UUID REFERENCES ehr.composition(id),
+  sys_transaction TIMESTAMP NOT NULL
+);
+CREATE INDEX ehr_compo_xref ON ehr.compo_xref USING BTREE (master_uuid);
+
 -- views to abstract querying
 -- EHR STATUS
 CREATE VIEW ehr.ehr_status AS
@@ -354,7 +364,23 @@ CREATE OR REPLACE VIEW ehr.comp_expand AS
     INNER JOIN ehr.status status ON status.ehr_id = ehr.id
     LEFT JOIN ehr.party_identified party ON status.party = party.id
     -- LEFT JOIN ehr.system sys ON ctx.setting = sys.id
-    LEFT JOIN ehr.party_identified fclty ON ctx.facility = fclty.id
+    LEFT JOIN ehr.party_identified fclty ON ctx.facility = fclty.id;
+
+--- CREATED INDEX
+CREATE INDEX label_idx ON ehr.containment USING GIST (label);
+CREATE INDEX comp_id_idx ON ehr.containment USING BTREE(comp_id);
+CREATE INDEX gin_entry_path_idx ON ehr.entry USING gin(entry jsonb_path_ops);
+CREATE INDEX template_entry_idx ON ehr.entry (template_id);
+
+-- to optimize comp_expand, index FK's
+CREATE INDEX entry_composition_id_idx ON ehr.entry (composition_id);
+CREATE INDEX composition_composer_idx ON ehr.composition (composer);
+CREATE INDEX composition_ehr_idx ON ehr.composition (ehr_id);
+CREATE INDEX status_ehr_idx ON ehr.status (ehr_id);
+CREATE INDEX status_party_idx ON ehr.status (party);
+CREATE INDEX context_facility_idx ON ehr.event_context (facility);
+CREATE INDEX context_composition_id_idx ON ehr.event_context (composition_id);
+CREATE INDEX context_setting_idx ON ehr.event_context (setting);
 
 
 -- AUDIT TRAIL has been replaced by CONTRIBUTION

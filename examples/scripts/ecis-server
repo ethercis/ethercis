@@ -1,23 +1,9 @@
 #!/bin/bash
-#
-# SCRIPT created July 2016, Christian Chevalley
-# rev EtherCIS 1.1.1 September 2016
 # description: Controls Ethercis Server
 # processname: ecis-server
 #
-# usage: 
-# ./ecis-server start|stop|restart
-# ./ecis-server clean -> purge the temp log file
-#
-# This script assumes "uber" jars as defined in each respective module pom.xml
-# specific libraries are posted at:
-# ethercis/libraries
-#
-# For deployment in production, the following should be done:
-# 
-# - remove the stdout/stderr redirection
-# - remove java remote debugging (unsafe)
-# - set authentication on JMX
+# SCRIPT created 15-10-2015, CCH
+# Rev 1.1. September 2016. Uses v1.1.0 SNAPSHOT
 #-----------------------------------------------------------------------------------
 UNAME=`uname`
 HOSTNAME=`hostname`
@@ -34,7 +20,7 @@ ECIS_MAILER=echo
 # NB: EtherCIS requires java 8
 if [ :${UNAME}: = :Linux: ];
 then
-  JAVA_HOME=/usr/java/jdk1.8.0_74/jre
+  JAVA_HOME=/opt/jdk1.8.0_60/jre
 fi
 if [ :${UNAME}: = :SunOS: ];
 then
@@ -51,7 +37,7 @@ export RUNTIME_ETC=/etc/opt/ecis
 export RUNTIME_LOG=/var/opt/ecis
 export RUNTIME_DIALECT=EHRSCAPE  #specifies the query dialect used in HTTP requests (REST)
 export SERVER_PORT=8080 # the port address to bind to
-export SERVER_HOST=`hostname` # the network address to bind to
+export SERVER_HOST=178.62.71.220 # the network address to bind to
 
 export MAILER_CONF=${RUNTIME_ETC}/xcmail.cf
 
@@ -82,6 +68,7 @@ ${LIB}/ecis-partyidentified-service-1.1.0-SNAPSHOT.jar:\
 ${LIB}/ecis-system-service-1.1.0-SNAPSHOT.jar:\
 ${LIB}/ecis-ehr-service-1.1.0-SNAPSHOT.jar:\
 ${LIB}/ecis-vehr-service-1.1.0-SNAPSHOT.jar:\
+${LIB}/ecis-query-service-1.0.0-SNAPSHOT.jar:\
 ${APPLIB}/ehrxml.jar:\
 ${APPLIB}/oet-parser.jar:\
 ${APPLIB}/ecis-openehr.jar:\
@@ -90,17 +77,6 @@ ${APPLIB}/adl-parser-1.0.9.jar
 
 # launch server
 # ecis server is run as user ethercis
-
-# add this to enable remote profiling with jProfiler
-#     -agentpath:/opt/jprofiler9/bin/linux-x64/libjprofilerti.so=port=8849 \
-
-# JMX stuff
-#	-Dcom.sun.management.jmxremote \
-#	-Dcom.sun.management.jmxremote.port=8999 \
-#    	-Dcom.sun.management.jmxremote.local.only=false \
-#	-Dcom.sun.management.jmxremote.ssl=false \
-#	-Dcom.sun.management.jmxremote.authenticate=false \
-
 su - ethercis << _ECIS
 case "$1" in
   start)
@@ -117,11 +93,16 @@ case "$1" in
 	-Xdebug \
 	-Xrunjdwp:transport=dt_socket,address=8000,suspend=n,server=y \
 	-Djava.util.logging.config.file=${RUNTIME_ETC}/logging.properties \
-	-Dlog4j.configurationFile=file:${RUNTIME_ETC}/log4j.xml \
+	-Dlog4j.configuration=file:${RUNTIME_ETC}/log4j.xml \
 	-Djava.net.preferIPv4Stack=true \
 	-Djava.awt.headless=true \
 	-Djdbc.drivers=org.postgresql.Driver \
     	-Dserver.node.name=vm01.ethercis.org \
+	-Dcom.sun.management.jmxremote \
+	-Dcom.sun.management.jmxremote.port=8999 \
+    	-Dcom.sun.management.jmxremote.local.only=false \
+	-Dcom.sun.management.jmxremote.ssl=false \
+	-Dcom.sun.management.jmxremote.authenticate=false \
     	-Dfile.encoding=UTF-8 \
     	-Djava.rmi.server.hostname=${SERVER_HOST} \
 	-Djooq.dialect=${JOOQ_DIALECT} \
@@ -131,7 +112,7 @@ case "$1" in
 	-Druntime.etc=${RUNTIME_ETC} \
 	 com.ethercis.vehr.Launcher \
 	-propertyFile /etc/opt/ecis/services.properties \
-    	-server_host ${SERVER_HOST} \
+    	-server_host 178.62.71.220 \
     	-server_port 8080 \
  2>> ${RUNTIME_LOG}/ethercis_test.log >> ${RUNTIME_LOG}/ethercis_test.log &    )&
     ;;
@@ -159,4 +140,3 @@ esac
 _ECIS
 exit 0
 # end of file
-
