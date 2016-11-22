@@ -161,7 +161,20 @@ Proportion Kind:
     INTEGER_FRACTION(4)
 
 **DvMultimedia**
-- not supported yet
+
+	integrityCheckAlgorithm": "openehr_integrity_check_algorithms::SHA-1"
+	mediaType": "IANA_media-types::text/plain"
+	compressionAlgorithm": "openehr_compression_algorithms::other"
+	uri": "file://test.ethercis.com/dir/file.jpg"
+	
+
+**DvParsable**
+
+	<value>,<formalism>
+
+For example (timing ISO8601)
+
+	/timing|value": "R2/2016-03-19T16:00:00Z/P1M,ISO8601"
 
 **Participation**
 
