@@ -1,5 +1,22 @@
 Changes 
 ----
+#####Ethercis-1.1.1 (December 2016)
+Multiple AQL fixes and enhancements.
+
+In particular, item structure names are now explicit in the jsonb structure. This allows to support queries in the form:
+
+	b_a/name/value as type
+
+Where
+
+	contains EVALUATION b_a[openEHR-EHR-EVALUATION.clinical_synopsis.v1]
+
+Current system should upgrade their DB using the migration utility
+ 
+	migrate-db-aql
+
+See in example section.
+
 #####Ethercis-1.1.1 (November 2016)
 This new snapshot contains various optimization to speed up AQL queries and composition retrieval. In  particular the AQL -> SQL translation produce quicker queries. NB. a number of indexes should be created, see pgsql_ehr.ddl in module jooq-pg for details. On the composition retrieval side, more local caching of Locatable re-usable structures is performed.
 
@@ -7,7 +24,7 @@ New format supported for compositions: RAW json. Sould be specified in the query
 
 Queries (both SQL and AQL) can be passed in a POST
 
-Better databse connection pooling using DBCP2. DB auto reconnection is activated by setting 
+Better database connection pooling using DBCP2. DB auto reconnection is activated by setting 
 
 	server.persistence.dbcp2.test_on_borrow = true
 
