@@ -1,7 +1,19 @@
 Changes 
 ----
 #####Ethercis-1.1.1 (December 2016)
-Multiple AQL fixes and enhancements.
+
+**Know bugs and limitation**
+
+* this version contains various fixes and enhancements. Please note that data structure names are currently supported in a temporary manner (rather naive at this stage, see below). In particular, CLUSTER name is not supported. I am currently working on improving it and should be released when I'm back from my January break.
+* Implicit node predicates are not supported. For example an AQL query with <code>_a/**data**/items[at0003]/value/value as priority_place_of_care,</code> should read <code>_a/**data[at0001]**/items[at0003]/value/value as priority_place_of_care,</code>
+
+
+
+Multiple AQL fixes and enhancements:
+
+* Timezone formatting in AQL: <code>2016-12-21T08:11:02UTC</code> is now <code>2016-12-21T08:11:02Z</code>
+* Less strict validation checking on DvCodedText. Support newlines (\n) in DvCodedText
+* Validation rule cache invalidation 
 
 In particular, item structure names are now explicit in the jsonb structure. This allows to support queries in the form:
 
