@@ -1,6 +1,12 @@
 Changes 
 ----
-#####Ethercis-1.1.1 (December 2016)
+##### This version (July 2017)
+
+* Build using Gradle and Maven (many thanks to @ralphvanetten for his energy to achieve this)
+* AQL has been improved significantly, added more operators etc.
+* [A roadmap will be published soon]
+
+##### Ethercis-1.1.1 (December 2016)
 
 **Know bugs and limitation**
 
@@ -29,7 +35,7 @@ Current system should upgrade their DB using the migration utility
 
 See in example section.
 
-#####Ethercis-1.1.1 (November 2016)
+##### Ethercis-1.1.1 (November 2016)
 This new snapshot contains various optimization to speed up AQL queries and composition retrieval. In  particular the AQL -> SQL translation produce quicker queries. NB. a number of indexes should be created, see pgsql_ehr.ddl in module jooq-pg for details. On the composition retrieval side, more local caching of Locatable re-usable structures is performed.
 
 New format supported for compositions: RAW json. Sould be specified in the query as format=RAW.
@@ -42,18 +48,18 @@ Better database connection pooling using DBCP2. DB auto reconnection is activate
 
 in the DBCP2 section of services.properties
 
-######Fixed various issues
+###### Fixed various issues
 
 - Shiro authenticate with authentication status kept at global thread level. This caused that any further authentication was granted regardless of credentials.
 - REST API NPE
 - Handling of itemlist 
 
-######Enhancements
+###### Enhancements
 
 - Knowledge cache can be reloaded via the REST API (template/reload). Convenient if you upload templates directly into the knowledge directory (/etc/opt/ecis/knowledge).
 - CORS should work better now, added (much) more allowed headers including Ehr-Session 
 
-######To use this version please note the following
+###### To use this version please note the following
 
 - Create the indexes in the database
 
@@ -91,7 +97,7 @@ in the DBCP2 section of services.properties
 		#server.persistence.dbcp2.set_max_prepared_statements = 200
   
 
-#####Ethercis-1.1.1 (September 2016)
+##### Ethercis-1.1.1 (September 2016)
 This is a new snapshot version with a number of bug fixes and improvements:
 
 - Ehr status other_details (support input under RAW JSON format) including AQL queries
@@ -116,7 +122,7 @@ The asynchronous query mode can be set in service.properties:
 	server.callback_timeout=10000
 
 
-#####Ethercis-1.1.1 (August 2016)
+##### Ethercis-1.1.1 (August 2016)
 - Supports validation
 
 **NOTE**
@@ -132,7 +138,7 @@ The validation can be disabled at run time with the following JVM property
 	-Dvalidation.lenient=true
 
 
-#####Ethercis-1.1.0 (July 2016)
+##### Ethercis-1.1.0 (July 2016)
 
 - Support AQL query
 - Changes in the JSONB entry structure:
