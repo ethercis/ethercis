@@ -8,7 +8,7 @@ Summer Edition July 2017
 What is it?
 -----------
 
-A brief introduction to Ethercis is given [here](http://ethercis.github.io/)
+More documentation about the concepts and architecture are located [here](http://docs.ethercis.org/)
 
 Project Structure
 ---
