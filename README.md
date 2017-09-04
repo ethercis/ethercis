@@ -3,7 +3,7 @@ Ethercis
 
 Summer Edition July 2017 
 
-(see [roadmap](https://github.com/ethercis/ethercis/ethercis-roadmap.md) for more details)
+(see [roadmap](https://github.com/ethercis/ethercis/blob/master/ethercis-roadmap.md) for more details)
 
 What is it?
 -----------
