@@ -42,6 +42,8 @@ The timeframe targets are tentatively aligned with feedback from users as well a
 	- partial node predicates 
 	- partial path
 	- RAW JSON returned for whole object query (composition)
+	- DISTINCT support
+	- EXISTS support
 - Identify and document simple FHIR/EtherCIS bridging
 - ECISFLAT syntax/support fix (instruction UID, optional attributes etc.)
 
