@@ -1,6 +1,6 @@
 # EtherCIS Roadmap #
 
-Updated September 04, 2017
+Updated October 05, 2017
 
 This roadmap is based on
 
