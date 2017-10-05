@@ -46,6 +46,7 @@ The timeframe targets are tentatively aligned with feedback from users as well a
 	- EXISTS support
 - Identify and document simple FHIR/EtherCIS bridging
 - ECISFLAT syntax/support fix (instruction UID, optional attributes etc.)
+- Demographics querying (AQL). Demographics as a Foreign data repository.
 
 ### Security
 - JWT/OAuth support: authentication and authorization, RBAC
@@ -91,6 +92,7 @@ The timeframe targets are tentatively aligned with feedback from users as well a
 
 The following is a non exhaustive list of what has been done so far in the past months.
 
+- Postgresql Function support in AQL
 - RAW JSON support (AQL)
 - Input validation based on Template constraints
 - Example of trigger usage for indicators (patient summary cache)
