@@ -42,7 +42,6 @@ The timeframe targets are tentatively aligned with feedback from users as well a
 	- partial node predicates 
 	- partial path
 	- RAW JSON returned for whole object query (composition)
-	- DISTINCT support
 	- EXISTS support
 - Identify and document simple FHIR/EtherCIS bridging
 - ECISFLAT syntax/support fix (instruction UID, optional attributes etc.)
@@ -93,6 +92,7 @@ The timeframe targets are tentatively aligned with feedback from users as well a
 The following is a non exhaustive list of what has been done so far in the past months.
 
 - Postgresql Function support in AQL
+- DISTINCT support
 - RAW JSON support (AQL)
 - Input validation based on Template constraints
 - Example of trigger usage for indicators (patient summary cache)
