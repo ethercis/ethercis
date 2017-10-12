@@ -8,7 +8,7 @@ Summer Edition July 2017
 What is it?
 -----------
 
-More documentation about the concepts and architecture are located [here](http://docs.ethercis.org/)
+More documentation about the concepts and architecture of EtherCIS is located [here](http://docs.ethercis.org/)
 
 Project Structure
 ---
