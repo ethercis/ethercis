@@ -102,4 +102,22 @@ In this section you will find:
 - [installation](https://github.com/ethercis/ethercis/tree/master/installation) documentation and readme's, mostly to install a system
 - [REST API](https://github.com/ethercis/ethercis/blob/master/doc/rest%20api.md) and [FLAT JSON] (https://github.com/ethercis/ethercis/blob/master/doc/flat%20json.md)
 - [Composition Serialization and Query](https://github.com/ethercis/ethercis/blob/master/doc/serialization.md)
+
+
+## Product/Project Support
+This product /project is supported by the Ripple Foundation http://ripple.foundation/ , who aim to enhance the EtherCIS solution. We are working to fund as many of the enhancements of EtherCIS as we can based on projects that our non profit organisation supports.
+
+We will try to fix any key bugs and documentation errors ourselves. Other requests for enhancements or feature additions, will be added to the project backlog.
+
+The Ripple Foundation is committed to offering free and open software, with quality, free and open documentation, but unfortunately is unable to offer free support for all issues/pull requests in the backlog.
+
+(Our latest thinking on the best model to support our open platform mission in healthcare may best be understood by reading this article. https://opensource.com/business/16/4/refactoring-open-source-business-models
+
+If you would like to offer some of your energy/ suggest other ideas towards progressing an open platform in healthcare, please contact us at info@ripple.foundation )
+
+If you need support with a particular issue/pull request, please let us know and we can consider a bounty source (https://www.bountysource.com/), to get these reviewed / addressed.
+
+Thanks for your interest in EtherCIS
+
+The Ripple Foundation
  
