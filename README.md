@@ -105,9 +105,10 @@ In this section you will find:
 
 
 ## Product/Project Support
-This product /project is supported by the Ripple Foundation http://ripple.foundation/ , who aim to enhance the EtherCIS solution. We are working to fund as many of the enhancements of EtherCIS as we can based on projects that our non profit organisation supports.
+This product /project is supported by the Ripple Foundation, who aim to enhance the EtherCIS solution. 
+We are working to fund as many of the enhancements of EtherCIS as we can based on projects that our non profit organisation supports.
 
-We will try to fix any key bugs and documentation errors ourselves. Other requests for enhancements or feature additions, will be added to the project backlog.
+We will try to fix any key bugs and documentation errors ourselves. Other issues, requests for enhancements or feature additions, will be added to the project backlog.
 
 The Ripple Foundation is committed to offering free and open software, with quality, free and open documentation, but unfortunately is unable to offer free support for all issues/pull requests in the backlog.
 
@@ -120,4 +121,5 @@ If you need support with a particular issue/pull request, please let us know and
 Thanks for your interest in EtherCIS
 
 The Ripple Foundation
+http://ripple.foundation/
  
