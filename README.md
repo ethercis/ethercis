@@ -10,6 +10,10 @@ What is it?
 
 More documentation about the concepts and architecture of EtherCIS is located [here](http://docs.ethercis.org/)
 
+What's new?
+-----------
+- Posted a new (a first prelease) of the installation package. It contains scripts and libraries to perform a complete installation of Postgresql 10 and EtherCIS server with preconfiguration of the DB. It contains also a set of openEHR operational templates to get you started. The package is in the "Releases" [section](https://github.com/ethercis/ethercis/releases/tag/v1.1.0-beta). NB. This installation has been tested on CentOS 7 (should work on RHEL 7).
+
 Project Structure
 ---
 To allow various deployment and integration, the project is partitioned in two parts:
