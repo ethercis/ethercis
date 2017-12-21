@@ -1,11 +1,11 @@
-#FLAT JSON
+# FLAT JSON
 
-EtherCIS supports two flat json format
+EtherCIS supports two flat json formats
 
-- ECISFLAT: which is the native *understanding* of FLAT JSON based on AQL path. Since EtherCIS relies on RM object representation (in particular Composition), the parsing of flatten json key value pairs is efficient.
+- ECISFLAT: which is the native *understanding* of FLAT JSON based on AQL path. Since EtherCIS relies on RM object representation (in particular Composition), the parsing of flat json key value pairs is efficient.
 - FLAT: this is Marand's flat json format as described in the [Overview of openEHR and Ehrscape](https://github.com/handihealth/c4h_sits/blob/master/docs/general/openehr_intro.md). 
 
-##FLAT
+## FLAT
 
 Marand's flat json is based on key value pairs (more precisely path/value) where the path expression is based on node names and array indexes. For example:
 
@@ -38,9 +38,9 @@ Marand's flat json is based on key value pairs (more precisely path/value) where
 	  "ctx/territory": "GB"
 	}
  
-This flat json format is easy to read and interpret by a human operator, but it cannot be directly identified by Ocean's modeling tools.
+This flat json format is easy to read and interpret by a human operator, but it cannot be directly identified by Ocean's modelling tools.
 
-##ECISFLAT
+## ECISFLAT
 The flat json format currently supported by Ethercis is a simple Path/Value representation of data in a Composition.
 
 For example, a flat json data block is
@@ -71,9 +71,9 @@ For example, a flat json data block is
 
 
 
-###Paths
+### Paths
 
-The path expression is directly issued from the [template designer](http://www.openehr.org/downloads/modellingtools) or a CKM like [openEHR UK CKM](http://www.clinicalmodels.org.uk/ckm/). For the latter select 'Show Path' option when displaying a template.
+The path expression is directly issued from the [template designer](http://www.openehr.org/downloads/modellingtools) or a CKM like [openEHR UK CKM](http://www.clinicalmodels.org.uk/ckm/). For the latter, select 'Show Path' option when displaying a template.
 
 OpenEHR locatable path are described at: [Paths and Locators](http://www.openehr.org/releases/1.0.2/html/architecture/overview/Output/paths_and_locators.html)
 
@@ -83,8 +83,8 @@ NB. In a flat json block, path expressions consist of several sections:
 - **a number of composition attributes** to specify: category, language etc
 - **/content** the set of entries (care entries, section, admin entry etc.) 
 
-###Values
-The syntaxt for encoding of OpenEHR data values follow several conventions depending on the type, see: [Data Types Specification](http://www.openehr.org/releases/1.0.2/architecture/rm/data_types_im.pdf) for more details
+### Values
+The syntax for encoding of OpenEHR data values follow several conventions depending on the type, see: [Data Types Specification](http://www.openehr.org/releases/1.0.2/architecture/rm/data_types_im.pdf) for more details
 
 
 **DvCodedText**
