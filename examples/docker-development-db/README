@@ -1,0 +1,13 @@
+IMPORTANT: the file  docker-entrypoint.sh is taken from the official postgresql docker image sources. Therefore it is subject to MIT license as per: https://github.com/docker-library/postgres/blob/master/LICENSE 
+
+Build a docker image with:
+
+docker build --tag=whatever_tag_you_want ./
+
+note that this docker image uses a sql file that must be copied over from EtherCIS code base. I'll automate this to get it from github.
+
+once you have the image built, you can run a temporary instance via
+	
+docker run -it --rm  --name="pgtest" -e POSTGRES_PASSWORD=postgres -p 5432:5432 whatever_tag_you_want
+
+this container will have the sql script already run but you'll need to use flyway via gradle using the core EtherCIS repository projects to fully init the postgresql container after it starts. Once you do that, you can use this container for development purposes, such as running integration tests. In the future, the flway execution should be added to this image as well: just pull it from github and run it during container startup.			 
