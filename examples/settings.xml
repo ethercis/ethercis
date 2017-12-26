@@ -20,9 +20,10 @@
                 <jdk>1.8</jdk>
             </activation>
             <properties>
-                <user.deploy>/Development/Dropbox/eCIS_Development/eCIS-LIB/deploy</user.deploy>
-                <user.localDirectoryPath>/Development/Dropbox/eCIS_Development/eCIS-LIB/local-maven-repo/</user.localDirectoryPath>
-                <user.localMavenRepo>file:///C:/Development/Dropbox/eCIS_Development/eCIS-LIB/local-maven-repo/</user.localMavenRepo>
+                <user.deploy>/media/sarikan/data/work/data/ethercis-deployment/deploy</user.deploy>
+                <!-- <user.localDirectoryPath>/media/sarikan/data/work/data/ethercis-deployment/local-maven-repo/</user.localDirectoryPath> -->
+                <user.localDirectoryPath>${user.home}/.m2/repository</user.localDirectoryPath>
+                <!-- <user.localMavenRepo>/media/sarikan/data/work/data/ethercis-deployment/local-maven-repo/</user.localMavenRepo> -->
             </properties>
         </profile>
     </profiles>
