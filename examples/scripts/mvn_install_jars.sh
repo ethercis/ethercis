@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ./libraries/
+cd ../../libraries/
 
 #required for the ehr core  (and probably for the vehr) repository
 mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  -Dfile=openEHR.v1.OperationalTemplate-1.0.1.jar  -DgroupId=org.openehr  -DartifactId=openEHR.v1.OperationalTemplate -Dversion=1.0.1  -Dpackaging=jar 
