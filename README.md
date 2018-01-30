@@ -5,6 +5,8 @@ Summer Edition July 2017
 
 (see [roadmap](https://github.com/ethercis/ethercis/blob/master/ethercis-roadmap.md) for more details)
 
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/Ripple-Foundation/EtherCIS)
+
 What is it?
 -----------
 
