@@ -1,131 +1,107 @@
-Ethercis
-========
+## How to set up a development environment for EtherCis
 
-Summer Edition July 2017 
+EtherCIS code base is distributed over two git repositories. [EhrService](https://github.com/ethercis/ehrservice) and [VirtualEhr](https://github.com/ethercis/VirtualEhr)
+EhrService is the core functionality such as database access, validation, knowledge repository functionality (opt files) etc. VirtualEhr is a service layer that sits on top of this core functionality and brings together these core libraries to provide services such as Ehr, Composition etc. VirtualEhr also contains a project with an embedded web server that allows REST API access to these services. Finally, the [ethercis](https://github.com/ethercis/ethercis) repository provides documentation and other artefacts which are not directly code but are relevant to both two other repositories.
 
-(see [roadmap](https://github.com/ethercis/ethercis/blob/master/ethercis-roadmap.md) for more details)
+### Directory layout
+It is recommended that you create a development directory which contains three git repositories as follows:
 
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/Ripple-Foundation/EtherCIS)
+```
+development_directory/
+├── ehrservice/
+│   ├── pom.xml
+│   ├── ...
+│
+├── ethercis/
+│   ├── README.md
+│   ├── ...
+│
+├── VirtualEhr/
+│   ├── pom.xml
+│   ├── ...
+```
+As seen in the diagram above, ehrservice and VirtualEhr repositories are configured to use the [maven](https://maven.apache.org/) build tool. The instructions for building EtherCIS are based on maven. Note that your IDEs (Intellij Idea, Eclipse etc) maven integration may not always be perfect. Therefore, it is recommended that you make sure that you can build EtherCis using maven from the command line first, before attempting to use your IDE, even though it provides maven based functionality. The following steps assume this directory layout is in place.
 
-What is it?
------------
+### Building EtherCis
 
-More documentation about the concepts and architecture of EtherCIS is located [here](http://docs.ethercis.org/)
+- Todo: list reqs here , java, maven, docker etc.
 
-What's new?
------------
-- Posted a new (a first prelease) of the installation package. It contains scripts and libraries to perform a complete installation of Postgresql 10 and EtherCIS server with preconfiguration of the DB. It contains also a set of openEHR operational templates to get you started. The package is in the "Releases" [section](https://github.com/ethercis/ethercis/releases/tag/v1.1.0-beta). NB. This installation has been tested on CentOS 7 (should work on RHEL 7).
+#### Install third party libraries
+Ethercis makes use of third party libraries which must be installed to your local maven repository for the code to compile and run. In order to install these libraries you can either run the install_3rd_party_jars.sh script or run the following commands which is the content of this script:
 
-Project Structure
----
-To allow various deployment and integration, the project is partitioned in two parts:
+```
+cd ehrservice/libraries
 
-- core components: this part deals with OpenEhr object handling, serialization, deserialization, knowledge management and persistence
-- service wrappers: this part encapsulate core components into a service framework with a REST API and JMX instrumentalization.
+#required for the ehr core  (and probably for the vehr) repository
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  -Dfile=openEHR.v1.OperationalTemplate-1.0.1.jar  -DgroupId=org.openehr  -DartifactId=openEHR.v1.OperationalTemplate -Dversion=1.0.1  -Dpackaging=jar
 
-**Core Components**
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  -Dfile=openEHR.v1.Template-1.0.1.jar       -DgroupId=org.openehr  -DartifactId=openEHR.v1.Template -Dversion=1.0.1  -Dpackaging=jar
 
-The core modules are located in the repository [ehrservice](https://github.com/ethercis/ehrservice):
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  -Dfile=openehr-am-rm-term-1.0.9.jar       -DgroupId=org.openehr  -DartifactId=openehr-am-rm-term -Dversion=1.0.9  -Dpackaging=jar
 
-- core: fundamental operations and encoding of OpenEhr entities
-- ehrdao: persistence of OpenEhr entities using a mixed model (relational/NoSql)
-- knowledge-cache: caching of OpenEhr knowledge models (operational templates in particular)
-- aql-processor: two passes SQL translation and query execution
-- jooq-pg: utility module, binds ethercis table to jOOQ/Postgresql 9.4
-- transform is mainly used to deal with raw json
-- validation is responsible to check data input in relation to an openEHR template
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  -Dfile=applib/adl-parser-1.0.9.jar      -DgroupId=org.openehr  -DartifactId=adl-parser -Dversion=1.0.9  -Dpackaging=jar
 
-**Service Wrappers**
+#required for the Vehr repository
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  -Dfile=ehrxml-1.0.0.jar       -DgroupId=ethercis  -DartifactId=ehrxml -Dversion=1.0.0  -Dpackaging=jar
 
-The services and framework are located in [VirtualEhr](https://github.com/ethercis/VirtualEhr)
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  -Dfile=applib/session-logger-service-1.0-SNAPSHOT.jar       -DgroupId=ethercis  -DartifactId=session-logger-service -Dversion=1.0-SNAPSHOT  -Dpackaging=jar
 
-- `ServiceManager` service management framework
-- `VEhrService` Query gateway of a running instance
-- `ResourceAccessService` a common service to access external resources (DB, knowledge etc.)
-- `PartyIdentifiedService` wrapper to interact with OpenEhr PartyIdentified entities
-- `LogonService` controls user login/logout and sessions
-- `AuthenticationService` wrap a security policy provider
-- `CacheKnowledgeService` wrapper of knowledge-cache to allow user queries
-- `EhrService` deals with user queries on OpenEhr Ehr and Ehr Status objects
-- `CompositionService` deals with user queries on Composition objects
+cd 3rdparty
 
-Please refer to the respective component's README for more details on the above
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  -Dfile=xml-serializer-1.0.9.jar      -DgroupId=org.openehr  -DartifactId=xml-serializer -Dversion=1.0.9  -Dpackaging=jar
 
-**Database**
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  -Dfile=rm-builder-1.0.9.jar      -DgroupId=org.openehr  -DartifactId=rm-builder -Dversion=1.0.9  -Dpackaging=jar
 
-The database is based on bi-temporal tables keeping records history. See [pgsql_ehr.ddl](https://github.com/ethercis/ehrservice/blob/remote-github/ehrdao/resources/ddls/pgsql_ehr.ddl) for more details on the actual structure and triggers.
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  -Dfile=oet-parser-1.0.5.jar      -DgroupId=org.openehr  -DartifactId=oet-parser -Dversion=1.0.5  -Dpackaging=jar
 
-The DB can be generated by running the above ddl script. Schema `ethercis` should exist.
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  -Dfile=thinkehr-framework-jsonlib-2.3.0-JL32.jar      -DgroupId=org.openehr  -DartifactId=thinkehr-framework-jsonlib -Dversion=2.3.0-JL32  -Dpackaging=jar
 
-Tables TERRITORY, LANGUAGE and CONCEPT should be populated from openEHR local terminology definition contained in `terminology.xml`. Script `populate-concept` is provided to perform this task (see [ethercis/examples/scripts](https://github.com/ethercis/ethercis/tree/master/examples))
+```
 
-###### Required PostgreSQL extensions
+#### Install Postgresql and run db scripts
+After you install the third party libraries, the first thing you need to do is to set up [postgresql](https://www.postgresql.org/) server and install required extensions for postgres. You may think that you can set up a database after you compile the code but **you cannot compile the code unless you have a database with tables etc. in place**. This is due to EtherCis using a data access layer that processes the database to generate source files. So you need to have a database, install tables etc, then perform code generation **before** you build EtherCis. 
 
-<html>
-<body>
-<table border="1" style="border-collapse:collapse">
-<tr><td>plpgsql</td><td>1.0</td><td></td></tr>
-<tr><td>jsquery</td><td>1.0</td><td>https://github.com/postgrespro/jsquery</td></tr>
-<tr><td>ltree</td><td>1.0</td><td>https://www.postgresql.org/docs/9.4/static/ltree.html</td></tr>
-<tr><td>temporal_tables</td><td>1.0.2</td><td>http://pgxn.org/dist/temporal_tables/</td></tr>
-<tr><td>uuid-ossp</td><td>1.0</td><td>https://www.postgresql.org/docs/9.5/static/uuid-ossp.html</td></tr>
-</table>
-</body>
-</html>
+Installation instructions in the Ethercis installer package TODO: GIVE LINK explain how you can install postgresql and required extensions. For the purposes of development, it is recommended that you use [Docker](https://www.docker.com/).  If you want to build a docker image locally, that is, use a dockerfile to cook the image on your own, the dockerfile used by this code base is here (TODO: GIVE LINK)
+A previously build image based on the dockerfile linked above can be found [here](https://hub.docker.com/r/serefarikan/ethercis-pg/) The following command starts an ephemeral container of this image:
+`docker run -d -it --rm  --name="pg-ethercis" -e POSTGRES_PASSWORD=postgres -p 5432:5432 serefarikan/ethercis-pg:v1`
+you can stop this container by `docker stop pg-ethercis`
+*(WARNING: Make sure that you read the note about docker at the end of this document)*
 
-How To Build It?
-----------------
-- You need to compile each module as indicated in their respective README. A global setting for the assembly of *uber* jars should be done in your `settings.xml`. An example is given at ethercis/examples/
-- The sample launch script (ecis-server) assumes some jar assemblies to simplify the classpath. At the moment, there is no assembly provided in the pom's.
-- Locally, you should install the 'exotic' libraries required by Maven. These jars are located in directory 'libraries'. Local installation can be achieved with the following command for example:
+Once the postgresql image is up (you may want to run the command without -d to ensure that postgres started) you must generate the database tables, stored procedures etc. as follows:
 
-		mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  
-		    -Dfile=/Development/Dropbox/eCIS_Development/eCIS-LIB/compositionTemplate.jar 
-		    -DgroupId=org.openehr 
-		    -DartifactId=org.openehr.openEHR.v1 
-		    -Dversion=1.0.0 
-		    -Dpackaging=jar 
-		    -DlocalRepositoryPath=/Development/Dropbox/eCIS_Development/eCIS-LIB/local-maven-repo
+```
+cd ehrservice
+./gradlew db:flywayMigrate
+```
 
-- Gradle is now also supported
+The command above uses [gradle](https://gradle.org/) to run [flyway](https://flywaydb.org/) Gradle is a build tool like maven but it is not needed to build anything in the Ethercis code base. You can think of it as a scripting tool used in this step to easily generate database artefacts. 
 
-## How To Run It?
+#### Install core Ethercis libraries to local maven repository
+Once the database is running (in docker or standalone) and the tables etc are created, you can install core Ethercis libraries as follows:
+```
+cd ehrservice
+mvn clean install -Dmaven.test.failure.ignore=true
+```
+The above command builds and installs core Ethercis libraries to your local maven repository. Note that this command runs the tests but ignores failures. This is because we want to know what tests are failing but we don't want maven to cancel the build, which is the default behaviour in case tests fail. You can find a report of test outcomes under the target/site directory that is created by maven. 
 
-- Script `ecis-server` should be adapted to get the right classpath, path to required configuration, network parameters etc.
-- Ditto for all configuration files.
+The above mvn command triggers the build and  generates the java code that Ethercis will use to access the db during the build (jooq-pq module). This is why you need to have the database running when you're installing core Ethercis libraries: without a db running, code generation would not work. 
 
-The scripts and configuration samples are in directory `examples` 
+#### Install VirtualEhr libraries to local maven repository
+Once the installation of the core libraries is done, we can build the higher level services by doing the following:
+```
+cd VirtualEhr
+mvn clean install -Dmaven.test.failure.ignore=true
+```
+The above mvn build makes use of the core libraries installed in the previous step and also runs tests in the same way. In case you'd like to confirm that your development setup can start EtherCis and use the REST API, run the following commands:
 
-Script `ecis-server` uses *uber* jars to keep the modularity of the platform as well as to ease the production of patches. The jars are posted at [libraries](https://github.com/ethercis/ethercis/tree/master/libraries) until a better file repository is identified.
+```
+cd VirtualEhr/vehr-integration-tests
+mvn integration-test -Dcucumber.options="--glue com.ethercis.vehr src/test/resources/features/RestApiAQL.feature"
+```
 
-Documentation And Examples
--
+The above mvn command will run a single feature file which will start the embedded server, put some data in and query it using Aql. This is a good round-trip scenario to confirm that your development setup is in place and you're able to run EtherCIS based on the code on your disk.
 
-In this section you will find:
+Once you've completed all these steps, you can now starting working on Ethercis code base knowing that you have a correctly configured development environment. 
 
-- [examples](https://github.com/ethercis/ethercis/tree/master/examples) scripts and configuration files to run ethercis on a Linux box. Scripts can be adapted to launch the server on  Windows if required.
-- [libraries](https://github.com/ethercis/ethercis/tree/master/libraries) some pre-compiled libraries to make life a bit easier (mostly xml bindings classes and one to avoid conflicts with the patches from the core module
-- [installation](https://github.com/ethercis/ethercis/tree/master/installation) documentation and readme's, mostly to install a system
-- [REST API](https://github.com/ethercis/ethercis/blob/master/doc/rest%20api.md) and [FLAT JSON](https://github.com/ethercis/ethercis/blob/master/doc/flat%20json.md)
-- [Composition Serialization and Query](https://github.com/ethercis/ethercis/blob/master/doc/serialization.md)
-
-
-## Product/Project Support
-This product /project is supported by the Ripple Foundation, who aim to enhance the EtherCIS solution. 
-We are working to fund as many of the enhancements of EtherCIS as we can based on projects that our non profit organisation supports.
-
-We will try to fix any key bugs and documentation errors ourselves. Other issues, requests for enhancements or feature additions, will be added to the project backlog.
-
-The Ripple Foundation is committed to offering free and open software, with quality, free and open documentation, but unfortunately is unable to offer free support for all issues/pull requests in the backlog.
-
-(Our latest thinking on the best model to support our open platform mission in healthcare may best be understood by reading this article. https://opensource.com/business/16/4/refactoring-open-source-business-models
-
-If you would like to offer some of your energy/ suggest other ideas towards progressing an open platform in healthcare, please contact us at info@ripple.foundation )
-
-If you need support with a particular issue/pull request, please let us know and we can consider a bounty source (https://www.bountysource.com/), to get these reviewed / addressed.
-
-Thanks for your interest in EtherCIS
-
-The Ripple Foundation
-http://ripple.foundation/
- 
+#### A note about docker containers
+Remember that running an ephemeral docker image means that the whole container is deleted once you stop it. This means the next time you create a new container based on this image, **you need to run the gradle script again, to make sure the database is in place**. You may prefer to not to run an ephemeral image and keep using the stopped container if you find yourself forgetting to do this. Also remember that if you somehow run `mvn install` for the core repository while the db server is running but without the tables in place, you'll overwrite required db access library in the local maven repository with an empty one! Be careful, since this would then lead to VirtualEhr services failing. 
