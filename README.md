@@ -21,6 +21,11 @@ development_directory/
 │   ├── ...
 ```
 As seen in the diagram above, ehrservice and VirtualEhr repositories are configured to use the [maven](https://maven.apache.org/) build tool. The instructions for building EtherCIS are based on maven. Note that your IDEs (Intellij Idea, Eclipse etc) maven integration may not always be perfect. Therefore, it is recommended that you make sure that you can build EtherCis using maven from the command line first, before attempting to use your IDE, even though it provides maven based functionality. The following steps assume this directory layout is in place.
+=======
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/Ripple-Foundation/EtherCIS)
+
+What is it?
+-----------
 
 ### Building EtherCis
 
