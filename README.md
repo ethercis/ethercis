@@ -1,11 +1,9 @@
 Ethercis
 ========
 
-Almost Spring Edition Feb 2018 
+Spring-is-almost-there Edition Feb 2018 
 
 (see [roadmap](https://github.com/ethercis/ethercis/blob/master/ethercis-roadmap.md) for more details)
-
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/Ripple-Foundation/EtherCIS)
 
 What is it?
 -----------
@@ -34,11 +32,11 @@ The above libraries have been added to lib/application repository.
 
 The main repository lib/deploy is updated with the latest changes.
 
-##### Operational Template Introspection
+##### Operational Template Introspection (CR #74)
 
 A new feature now support OPT introspection. Useful to automate some client UI construct or others. It is also opening the door to further data analytics potential as introspection results can be used to further support complex DB queries. See documentation in [OPT introspection](https://github.com/ethercis/ethercis/blob/master/doc/OPT%20introspection.md "OPT introspection")
 
-##### Full template querying returning a JSON object (CR #74)
+##### Full template querying returning a JSON object (CR #73)
 
 This changes allows to get a whole composition from a template in JSON format. 
 
