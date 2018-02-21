@@ -1,7 +1,7 @@
 Ethercis
 ========
 
-Summer Edition July 2017 
+Almost Spring Edition Feb 2018 
 
 (see [roadmap](https://github.com/ethercis/ethercis/blob/master/ethercis-roadmap.md) for more details)
 
@@ -15,6 +15,44 @@ More documentation about the concepts and architecture of EtherCIS is located [h
 What's new?
 -----------
 - Posted a new (a first prelease) of the installation package. It contains scripts and libraries to perform a complete installation of Postgresql 10 and EtherCIS server with preconfiguration of the DB. It contains also a set of openEHR operational templates to get you started. The package is in the "Releases" [section](https://github.com/ethercis/ethercis/releases/tag/v1.1.0-beta). NB. This installation has been tested on CentOS 7 (should work on RHEL 7).
+
+#### Feb 2018
+
+##### Changes in library structure
+
+Few changes in the Uber jar generation to remove pesky dependencies on, yet-to-be-removed, org.openehr legacy classes. This has an impact on the classpath of the launch script to hold few more jars not included into the Uber jars anymore. Please note this will be modified soon as we are migrating to a continuous integration framework with Docker image generation.
+
+The changes consists in the following classpath addition in ecis-server script:
+
+```
+${APPLIB}/CompositionTemplate.jar:\
+${APPLIB}/openEHR.v1.Template.jar:\
+${APPLIB}/composition_xml.jar:\
+${APPLIB}/openEHR.v1.OperationalTemplate.jar
+```
+The above libraries have been added to lib/application repository.
+
+The main repository lib/deploy is updated with the latest changes.
+
+##### Operational Template Introspection
+
+A new feature now support OPT introspection. Useful to automate some client UI construct or others. It is also opening the door to further data analytics potential as introspection results can be used to further support complex DB queries. See documentation in [OPT introspection](https://github.com/ethercis/ethercis/blob/master/doc/OPT%20introspection.md "OPT introspection")
+
+##### Full template querying returning a JSON object (CR #74)
+
+This changes allows to get a whole composition from a template in JSON format. 
+
+To integrate this feature, a number of steps are required:
+
+- Migration of PostgreSQL to at least 9.6 (10 is recommended)
+- Installation of the functions supporting JSON encoding at DB level. A script is provided to help in this process. See in [resources/raw_json_encoding](https://github.com/ethercis/ehrservice/tree/remote-github/db/src/main/resources/raw_json_encoding)
+
+In the future, we plan to support most of encoding/retrieval/querying at DB level only (by-passing most of the middleware logic) for performance reason.
+
+##### Multiple fixes and enhancements
+
+Please see the list of closed/in-test CRs for more details.
+
 
 Project Structure
 ---
