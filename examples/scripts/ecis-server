@@ -79,7 +79,8 @@ ${APPLIB}/adl-parser-1.0.9.jar:\
 ${APPLIB}/CompositionTemplate.jar:\
 ${APPLIB}/openEHR.v1.Template.jar:\
 ${APPLIB}/composition_xml.jar:\
-${APPLIB}/openEHR.v1.OperationalTemplate.jar
+${APPLIB}/openEHR.v1.OperationalTemplate.jar:\
+${APPLIB}/thinkehr-framework-jsonlib-2.3.0-JL32.jar
 
 # launch server
 # ecis server is run as user ethercis
