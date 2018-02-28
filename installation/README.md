@@ -6,7 +6,7 @@ Xmas Edition 12/24/2015 3:54:43 PM
 What is it?
 -----------
 
-A brief introduction to Ethercis is given [here](http://ethercis.github.io/)
+A brief introduction to Ethercis is given [here](http://ethercis.org/)
 
 Project Structure
 ---
