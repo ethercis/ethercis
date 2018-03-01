@@ -27,6 +27,8 @@ The following are some kind of pre-announcements and should be considered as ten
 	- array querying
 	- EXISTS operator
 
+NB. As of this version, the build tool will be Maven only. The reason is that we simply don't have the resources to deal with multiple build strategy.
+
 ## EtherCIS v1.2: August 31st, 2018
 
 - DB based template caching and referential integrity
