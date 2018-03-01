@@ -1,99 +1,54 @@
 # EtherCIS Roadmap #
 
-Updated October 05, 2017
+Updated March 01, 2018
 
-This roadmap is based on
+We will create quarterly minor releases on the following schedule:
 
-- current issue backlog 
-- tickets present in the previous repository (Assembla).
-- Features that are needed to deploy EtherCIS in a production environment
-- Enhancements we think are useful in a foreseeable future 
+- EtherCIS v1.1: June 1st, 2018
+- EtherCIS v1.2: August 31st, 2018
+- EtherCIS v1.3: November 30th, 2018
+- EtherCIS v1.4: March 1st, 2019
 
-The timeframe targets are tentatively aligned with feedback from users as well as deployment projects due sometime next year.
- 
-# Timeframes #
+As a rule of thumb, we introduce CRs fixes (and PRs wherever applicable) into releases as well as new features and enhancements depending on various factors such as requirements from projects, users suggestions, things we want to do (because we think they are cool) etc.
 
-|Timeframe | Description|When|
-|----------|------------|----|
-|Immediate |CR's and bugs that need immediate attention, integrated in next release|Q4 17
-|Short Term|CR's and required enhancements for a beta release in production|Q1 18
-|Medium Term| CR's and enhancements needed to deploy EtherCIS fully in supervised production| Q3 18 |
-|Long Term| Features and Enhancements required to deal with large scale deployment|2019
+In between, whenever needed, we will release patches to fix critical issues as required. Patches are not intended to introduce new features/enhancements. Nevertheless GitHub code base will be updated in between to allow intermediary cut to be produced locally.  
 
-# Action Items
+The following are some kind of pre-announcements and should be considered as tentative schedule for the above releases.
 
-## Immediate ##
+## EtherCIS v1.1: June 1st, 2018
 
-- Easy install script: install EtherCIS + configure DB in less than 5' from scratch
-- Identify distribution strategy and repository
-- Refactor dependency on org.openehr java ref library (no more partial dependency)
-- Make tests not dependent on local configuration and DB state
-- EtherCIS version numbering
+- Changes in building EtherCIS and Continuous Integration (merge from [Seref Arikan](https://github.com/serefarikan) great contribution). This will also enable creating Docker images to easily deploy runtime environment.
+- EtherCIS libraries in Maven Central
+- HTTPS support
+- Support of JWT and implementation of authorization (RBAC)
+- Enhancing resultset export (refactoring): JSON, XML, CSV etc.
+- AQL enhancements
+	- smart type cast
+	- array querying
+	- EXISTS operator
 
-## Short Term ##
+## EtherCIS v1.2: August 31st, 2018
 
-### Core components
-- Transactional create/update composition
-- Better template handling
-	- Referential integrity composition-template (now a template can be changed unilaterally)
-	- DB based template caching + versioning
-- AQL multiple fixes and enhancements
-	- smarter type cast in queries (based on template constraints)
-	- partial node predicates 
-	- partial path
-	- RAW JSON returned for whole object query (composition)
-	- EXISTS support
-- Identify and document simple FHIR/EtherCIS bridging. Native FHIR integration
-- ECISFLAT syntax/support fix (instruction UID, optional attributes etc.)
-- Demographics querying (AQL). Demographics as a Foreign data repository.
+- DB based template caching and referential integrity
+- Canonical JSON composition CRU + optimized persistence processing
+- Demographic (RM) support in AQL with DB integration
+- More AQL enhancements (nesting, stored queries, arithmetic, ADL matching)
+ 	- partial path
+	- named node predicate in path
 
-### Security
-- JWT/OAuth support: authentication and authorization, RBAC
-- OpenId support: resolve id token to user (openEHR contribution etc.)
-- HTTPS
-- Propagate security policies to DB (row level policies, roles etc.)
+## EtherCIS v1.3: November 30th, 2018
 
-### Monitoring, Auditability
-- Fully implement service monitoring with admin interaction (JMX, partially implemented at this stage). Plan to use Jolokia since JSR160 is problematic in VMs.
-- Finalize Logging/auditing 
+- openEHR REST API v1.0 conformance
+- TBD
 
-## Medium Term ##
-- EtherCIS clustering: multiple EtherCIS server instances sharing common resources -> allow load balancing, horizontal scalability + fail over capability.
-- Cached session management, depends on openEHR REST API conformance requirements
-- DB Master/Slave configuration
-- Enhanced connection pooling, transactional load balancer (bonecp, pgbouncer)
-- Continuous integration, automated tests
-- Maven central EtherCIS artefacts (jars)
-- Multi Tenancy
-- Partial openEHR REST API conformance
+## EtherCIS v1.4: March 1st, 2019
 
-### Core components
-- Distributed Knowledge service (Template Cache)
+Much to discuss still, what's come to mind are possibly:
 
-## Long Term
-
-- JSON composition input/update
 - DB sharding
-- Full text search (used for narratives in composition, requires jsonb/Postgresql 9.10)
+- Full text search (used for narratives in composition)
 - openEHR DIRECTORY
 - openEHR TASK
-- Direct DB insert/update
-- AQL path resolution at DB level
-- AQL querying of arrays returning denormalized dataset
-- GDL
 - Contribution signing support
-- Full openEHR REST API conformance
 - Non committed composition (draft composition)
-
-# Completed Features
-
-The following is a non exhaustive list of what has been done so far in the past months.
-
-- AQL support of 'foreign' operators and functions (aggregation, math etc.)
-- DISTINCT support
-- RAW JSON support (AQL)
-- Input validation based on Template constraints
-- Example of trigger usage for indicators (patient summary cache)
-- AQL multiple syntax and operators enhancements
-- GraphQL query support (prototype, licensing needs clarification)
-- Filling in the gaps with Marand's API (demonstrated)
+- TBD
