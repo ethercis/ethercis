@@ -41,7 +41,6 @@ NB. As of this version, the build tool will be Maven only. The reason is that we
 ## EtherCIS v1.4: November 30th, 2018
 
 - openEHR REST API v1.0 conformance
-- Demographics support (AQL) and via FDW
 - Full text search on embedded jsonb fields (f.e. medical notes)
 
 ## EtherCIS v1.5: March 1st, 2019
