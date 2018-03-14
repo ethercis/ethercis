@@ -158,7 +158,7 @@ The Ripple Foundation is committed to offering free and open software, with qual
 
 If you would like to offer some of your energy/ suggest other ideas towards progressing an open platform in healthcare, please contact us at info@ripple.foundation )
 
-If you need support with a particular issue/pull request, please let us know and we can consider a bounty source (https://www.bountysource.com/), to get these reviewed / addressed.
+If you need support with a particular issue/pull request, please let us know and we can consider a bounty source (https://www.bountysource.com/), or indeed a formal project/support arrangement to get particular issues/requirements reviewed/ addressed.
 
 Thanks for your interest in EtherCIS
 
