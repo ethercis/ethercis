@@ -1,20 +1,54 @@
 Ethercis
 ========
 
-Spring-is-almost-there Edition Feb 2018 
-
-(see [roadmap](https://github.com/ethercis/ethercis/blob/master/ethercis-roadmap.md) for more details)
 
 What is it?
 -----------
 
+An [openEHR](http://www.openehr.org/) CDR essentially based on SQL that exposes its services *via* a REST API.
+
 More documentation about the concepts and architecture of EtherCIS is located [here](http://docs.ethercis.org/)
+
+Please also have a look to our [roadmap](https://github.com/ethercis/ethercis/blob/master/ethercis-roadmap.md) for more details
 
 What's new?
 -----------
 - Posted a new (a first prelease) of the installation package. It contains scripts and libraries to perform a complete installation of Postgresql 10 and EtherCIS server with preconfiguration of the DB. It contains also a set of openEHR operational templates to get you started. The package is in the "Releases" [section](https://github.com/ethercis/ethercis/releases/tag/v1.1.0-beta). NB. This installation has been tested on CentOS 7 (should work on RHEL 7).
 
-#### Feb 2018
+Changes
+======
+
+v1.1.2 (Apr 10 2018)
+--------------------
+This version merges Sheref's PR to allow CI using Travis.
+
+There are several changes including:
+
+- Tests are more or less operational but nevertheless work is needed to make them more meaningful (as well as coverage). To disable the tests, set maven skip test flag to ```true``` in the respective POMs:
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+
+- This version now uses PostgreSQL v10+. This is due mainly to better support returning compositions from AQL under
+a (canonical) JSON format. PostgreSQL 10 comes with interesting jsonb functions that makes this part easier since 
+JSON encoding can be partially done at DB level (NB. in the future this encoding shall be totally performed at DB level). The corresponding DB functions are in a flyway migration [script](https://github.com/ethercis/ehrservice/blob/remote-github/db/src/main/resources/db/migration/V5__raw_json_encoding.sql)
+which can be run manually
+
+- To run the tests, it is expected that a DB is installed locally and contains test data. The test data can be restored
+from a [backup file](https://github.com/ethercis/VirtualEhr/blob/master/file_repo/db_test/testdb-pg10.backup). The restore
+can be done using PGAdmin4 (since we use PostgreSQL 10). An easy way to proceed is to CASCADE DELETE schema 'ehr' and perform the restore using pg_restore as described in this [document](https://github.com/ethercis/ethercis/blob/master/doc/DB%20administration.md). Please note that the referential integrity trigger must be disabled. 
+
+The DB installation can be done using the script found [here](https://github.com/ethercis/deploy-n-scripts/blob/master/ethercis-install/v1.1.0/install-db.sh). The install process is described in the [deploy-n-scripts](https://github.com/ethercis/deploy-n-scripts) section.
+
+
+Spring-is-almost-there Edition Feb 2018
+---------------------------------------
 
 ##### Changes in library structure
 
