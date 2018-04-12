@@ -1,7 +1,7 @@
 ## How to set up a development environment for EtherCis
 
 EtherCIS code base is distributed over two git repositories. [EhrService](https://github.com/ethercis/ehrservice) and [VirtualEhr](https://github.com/ethercis/VirtualEhr)
-EhrService is the core functionality such as database access, validation, knowledge repository functionality (opt files) etc. VirtualEhr is a service layer that sits on top of this core functionality and brings together these core libraries to provide services such as Ehr, Composition etc. VirtualEhr also contains a project with an embedded web server that allows REST API access to these services. Finally, the [ethercis](https://github.com/ethercis/ethercis) repository provides documentation and other artefacts which are not directly code but are relevant to both two other repositories.
+EhrService is the core functionality such as database access, validation, knowledge repository functionality (opt files) etc. VirtualEhr is a service layer that sits on top of this core functionality and brings together these core libraries to provide services such as Ehr, Composition etc. VirtualEhr also contains a project with an embedded web server that allows REST API access to these services. Finally, the [ethercis](https://github.com/ethercis/ethercis) repository provides documentation and other artefacts which are not directly code but are relevant to both two other repositories. **There is an EhrService folder under VirtualEhr repository. This is not a copy of the ehrservice repo or anything like that. This is a component to perform operations on EHRs, so don't get confused if you see it**
 
 ### Directory layout
 It is recommended that you create a development directory which contains three git repositories as follows:
@@ -21,11 +21,6 @@ development_directory/
 │   ├── ...
 ```
 As seen in the diagram above, ehrservice and VirtualEhr repositories are configured to use the [maven](https://maven.apache.org/) build tool. The instructions for building EtherCIS are based on maven. Note that your IDEs (Intellij Idea, Eclipse etc) maven integration may not always be perfect. Therefore, it is recommended that you make sure that you can build EtherCis using maven from the command line first, before attempting to use your IDE, even though it provides maven based functionality. The following steps assume this directory layout is in place.
-=======
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/Ripple-Foundation/EtherCIS)
-
-What is it?
------------
 
 ### Building EtherCis
 
@@ -38,10 +33,10 @@ Development on Ethercis requires the following:
 The build instructions below have been tested on Ubuntu 16.04 with Java 8 and maven 3.3.9. Docker version: 17.05.0-ce. 
 
 #### Install third party libraries
-Ethercis makes use of third party libraries which must be installed to your local maven repository for the code to compile and run. In order to install these libraries you can either run the install_3rd_party_jars.sh script or run the following commands which is the content of this script:
+Ethercis makes use of third party libraries which must be installed to your local maven repository for the code to compile and run. In order to install these libraries you can either run the install_3rd_party_jars.sh (.bat for windows) (**you must run this script from the ehrservice folder** so change directory to that folder, then runt it) script or run the following commands which is the content of this script. That is, run the following commands one by one from command prompt/terminal after you change to ehrservice folder:
 
 ```
-cd ehrservice/libraries
+cd libraries
 
 #required for the ehr core  (and probably for the vehr) repository
 mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  -Dfile=openEHR.v1.OperationalTemplate-1.0.1.jar  -DgroupId=org.openehr  -DartifactId=openEHR.v1.OperationalTemplate -Dversion=1.0.1  -Dpackaging=jar
@@ -72,17 +67,24 @@ mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  -Dfile=thi
 #### Install Postgresql and run db scripts
 After you install the third party libraries, the first thing you need to do is to set up [postgresql](https://www.postgresql.org/) server and install required extensions for postgres. You may think that you can set up a database after you compile the code but **you cannot compile the code unless you have a database with tables etc. in place**. This is due to EtherCis using a data access layer that processes the database to generate source files. So you need to have a database, install tables etc, then perform code generation **before** you build EtherCis. 
 
-Installation instructions in the Ethercis installer package TODO: GIVE LINK explain how you can install postgresql and required extensions. For the purposes of development, it is recommended that you use [Docker](https://www.docker.com/).  If you want to build a docker image locally, that is, use a dockerfile to cook the image on your own, the dockerfile used by this code base is here (TODO: GIVE LINK)
-A previously build image based on the dockerfile linked above can be found [here](https://hub.docker.com/r/serefarikan/ethercis-pg/) The following command starts an ephemeral container of this image:
-`docker run -d -it --rm  --name="pg-ethercis" -e POSTGRES_PASSWORD=postgres -p 5432:5432 serefarikan/ethercis-pg:v1`
+Installation instructions in the Ethercis installer package TODO: GIVE LINK explain how you can install postgresql and required extensions. For the purposes of development, it is recommended that you use [Docker](https://www.docker.com/).  If you want to build a docker image locally, that is, use a dockerfile to cook the image on your own, the dockerfile used by this code base is under examples/docker-development-db Make sure you read the readme under that directory.
+If you don't want to use the dockerfile and build the image on your machine, you can use a previously build image (based on the dockerfile referenced above).  To use this pre-build image, all you have to do is run the docker run command. For example, the following command starts an ephemeral container of this image:
+`docker run -it --rm  --name="pg-ethercis" -e POSTGRES_PASSWORD=postgres -p 5432:5432 serefarikan/ethercis-pg:v1`
 you can stop this container by `docker stop pg-ethercis`
 *(WARNING: Make sure that you read the note about docker at the end of this document)*
 
-Once the postgresql image is up (you may want to run the command without -d to ensure that postgres started) you must generate the database tables, stored procedures etc. as follows:
+Wait for the postgresql image to start to make sure that you don't try to access the database before it can properly start. Once the postgresql image is up (when it says so in the command line) you must generate the database tables, stored procedures etc. as follows:
 
 ```
 cd ehrservice
 ./gradlew db:flywayMigrate
+```
+
+For Windows:
+
+```
+cd ehrservice
+gradlew.bat db:flywayMigrate
 ```
 
 The command above uses [gradle](https://gradle.org/) to run [flyway](https://flywaydb.org/) Gradle is a build tool like maven but it is not needed to build anything in the Ethercis code base. You can think of it as a scripting tool used in this step to easily generate database artefacts. 
@@ -109,6 +111,8 @@ The above mvn build makes use of the core libraries installed in the previous st
 cd VirtualEhr/vehr-integration-tests
 mvn integration-test -Dcucumber.options="--glue com.ethercis.vehr src/test/resources/features/RestApiAQL.feature"
 ```
+
+**If you're using Windows or if your OS default encoding is not UTF-8, make sure that you set JAVA_TOOL_OPTIONS environment variable to -Dfile.encoding=UTF-8 before running mvn from terminal/command prompt** This is needed because openEHR operational template files and test data (XML/JSON) may contain chars which can only be consistently represented with UTF-8. Current code base works fine when system default encoding is UTF-8 but the command above fails then run on on OS that does not have UTF-8 as its default encoding. Windows does this unfortunately.
 
 The above mvn command will run a single feature file which will start the embedded server, put some data in and query it using Aql. This is a good round-trip scenario to confirm that your development setup is in place and you're able to run EtherCIS based on the code on your disk.
 
