@@ -1,56 +1,53 @@
 Ethercis
 ========
 
-Spring-is-almost-there Edition Feb 2018 
-
-(see [roadmap](https://github.com/ethercis/ethercis/blob/master/ethercis-roadmap.md) for more details)
+v1.1.2 April 2018
 
 What is it?
 -----------
 
+An [openEHR](http://www.openehr.org/) CDR essentially based on SQL that exposes its services *via* a REST API.
+
 More documentation about the concepts and architecture of EtherCIS is located [here](http://docs.ethercis.org/)
+
+Please also have a look to our [roadmap](https://github.com/ethercis/ethercis/blob/master/ethercis-roadmap.md) for more details
 
 What's new?
 -----------
-- Posted a new (a first prelease) of the installation package. It contains scripts and libraries to perform a complete installation of Postgresql 10 and EtherCIS server with preconfiguration of the DB. It contains also a set of openEHR operational templates to get you started. The package is in the "Releases" [section](https://github.com/ethercis/ethercis/releases/tag/v1.1.0-beta). NB. This installation has been tested on CentOS 7 (should work on RHEL 7).
 
-#### Feb 2018
+- Installation scripts, libraries etc. can be now found into [deploy-n-scripts](https://github.com/ethercis/deploy-n-scripts)
+Windows server scripts example are now also provided.
+- The code based has been refactored to allow enabling tests during build. Please note that many of the tests are
+actually *integration* tests and require a local PostgreSQL 10 installation with a test DB (the test data can 
+be restored from a [backup file](https://github.com/ethercis/VirtualEhr/blob/master/file_repo/db_test/testdb-pg10.backup)
+- Posted a new (a first prelease) of the installation package. It contains scripts and libraries to perform a complete 
+installation of Postgresql 10 and EtherCIS server with preconfiguration of the DB (see below for more details on this)
+It contains also a set of openEHR operational templates to get you started. The package is in the "Releases"
+ [section](https://github.com/ethercis/ethercis/releases/tag/v1.1.0-beta). 
+ NB. This installation has been tested on CentOS 7 (should work on RHEL 7).
+- Multiple enhancements have been added to this version including a better support of "canonical" JSON whenever
+a whole composition is queried using AQL.
 
-##### Changes in library structure
+- To build EtherCIS you will need to separately build the following projects:
+* openehr-java-libs
+* ehrservice
+* VirtualEhr
 
-Few changes in the Uber jar generation to remove pesky dependencies on, yet-to-be-removed, org.openehr legacy classes. This has an impact on the classpath of the launch script to hold few more jars not included into the Uber jars anymore. Please note this will be modified soon as we are migrating to a continuous integration framework with Docker image generation.
+Building EtherCIS
+=====
 
-The changes consists in the following classpath addition in ecis-server script:
+To build the set of required libraries to run an EtherCIS server instance, you need to compile 3 sets of components:
 
-```
-${APPLIB}/CompositionTemplate.jar:\
-${APPLIB}/openEHR.v1.Template.jar:\
-${APPLIB}/composition_xml.jar:\
-${APPLIB}/openEHR.v1.OperationalTemplate.jar
-```
-The above libraries have been added to lib/application repository.
+- [openehr-java-libs](https://github.com/ethercis/openehr-java-libs) these are the low level openEHR RM/AM classes
+used to represent the abstract [openEHR RM model](http://www.openehr.org/releases/trunk/UML/)
+- [ehrservice](https://github.com/ethercis/ehrservice) this layer binds the persistence to the RM model including dealing
+with templates etc. This is the actual core layer of the architecture
+- [VirtualEhr](https://github.com/ethercis/VirtualEhr) is the projection of the core layer in services. Currently this
+provides a REST API as described [here](http://docs.ethercis.org/APIs.html)
 
-The main repository lib/deploy is updated with the latest changes.
-
-##### Operational Template Introspection (CR #74)
-
-A new feature now support OPT introspection. Useful to automate some client UI construct or others. It is also opening the door to further data analytics potential as introspection results can be used to further support complex DB queries. See documentation in [OPT introspection](https://github.com/ethercis/ethercis/blob/master/doc/OPT%20introspection.md "OPT introspection")
-
-##### Full template querying returning a JSON object (CR #73)
-
-This changes allows to get a whole composition from a template in JSON format. 
-
-To integrate this feature, a number of steps are required:
-
-- Migration of PostgreSQL to at least 9.6 (10 is recommended)
-- Installation of the functions supporting JSON encoding at DB level. A script is provided to help in this process. See in [resources/raw_json_encoding](https://github.com/ethercis/ehrservice/tree/remote-github/db/src/main/resources/raw_json_encoding)
-
-In the future, we plan to support most of encoding/retrieval/querying at DB level only (by-passing most of the middleware logic) for performance reason.
-
-##### Multiple fixes and enhancements
-
-Please see the list of closed/in-test CRs for more details.
-
+- You need to compile each module as indicated in their respective README (mvn clean install, this assumes a local 
+PostgreSQL 10 install with the test database loaded). 
+A global setting for the assembly of *uber* jars should be done in your `settings.xml`. 
 
 Project Structure
 ---
@@ -89,11 +86,14 @@ Please refer to the respective component's README for more details on the above
 
 **Database**
 
-The database is based on bi-temporal tables keeping records history. See [pgsql_ehr.ddl](https://github.com/ethercis/ehrservice/blob/remote-github/ehrdao/resources/ddls/pgsql_ehr.ddl) for more details on the actual structure and triggers.
+The database is based on bi-temporal tables keeping records history. 
+See [pgsql_ehr.ddl](https://github.com/ethercis/ehrservice/blob/remote-github/ehrdao/resources/ddls/pgsql_ehr.ddl) 
+for more details on the actual structure and triggers.
 
-The DB can be generated by running the above ddl script. Schema `ethercis` should exist.
+The DB can be generated by running the above ddl script. DB `ethercis` should exist.
 
-Tables TERRITORY, LANGUAGE and CONCEPT should be populated from openEHR local terminology definition contained in `terminology.xml`. Script `populate-concept` is provided to perform this task (see [ethercis/examples/scripts](https://github.com/ethercis/ethercis/tree/master/examples))
+Tables TERRITORY, LANGUAGE and CONCEPT should be populated from openEHR local terminology definition contained in `terminology.xml`. 
+Script `populate-concept` is provided to perform this task (see [ethercis/examples/scripts](https://github.com/ethercis/ethercis/tree/master/examples))
 
 ###### Required PostgreSQL extensions
 
@@ -109,22 +109,6 @@ Tables TERRITORY, LANGUAGE and CONCEPT should be populated from openEHR local te
 </body>
 </html>
 
-How To Build It?
-----------------
-- You need to compile each module as indicated in their respective README. A global setting for the assembly of *uber* jars should be done in your `settings.xml`. An example is given at ethercis/examples/
-- The sample launch script (ecis-server) assumes some jar assemblies to simplify the classpath. At the moment, there is no assembly provided in the pom's.
-- Locally, you should install the 'exotic' libraries required by Maven. These jars are located in directory 'libraries'. Local installation can be achieved with the following command for example:
-
-		mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  
-		    -Dfile=/Development/Dropbox/eCIS_Development/eCIS-LIB/compositionTemplate.jar 
-		    -DgroupId=org.openehr 
-		    -DartifactId=org.openehr.openEHR.v1 
-		    -Dversion=1.0.0 
-		    -Dpackaging=jar 
-		    -DlocalRepositoryPath=/Development/Dropbox/eCIS_Development/eCIS-LIB/local-maven-repo
-
-- Gradle is now also supported
-
 ## How To Run It?
 
 - Script `ecis-server` should be adapted to get the right classpath, path to required configuration, network parameters etc.
@@ -132,7 +116,8 @@ How To Build It?
 
 The scripts and configuration samples are in directory `examples` 
 
-Script `ecis-server` uses *uber* jars to keep the modularity of the platform as well as to ease the production of patches. The jars are posted at [libraries](https://github.com/ethercis/ethercis/tree/master/libraries) until a better file repository is identified.
+Script `ecis-server` uses *uber* jars to keep the modularity of the platform as well as to ease the production of patches. 
+The jars are posted at [libraries](https://github.com/ethercis/ethercis/tree/master/libraries) until a better file repository is identified.
 
 Documentation And Examples
 -
@@ -145,6 +130,78 @@ In this section you will find:
 - [REST API](https://github.com/ethercis/ethercis/blob/master/doc/rest%20api.md) and [FLAT JSON](https://github.com/ethercis/ethercis/blob/master/doc/flat%20json.md)
 - [Composition Serialization and Query](https://github.com/ethercis/ethercis/blob/master/doc/serialization.md)
 
+Changes
+======
+
+v1.1.2 (Apr 10 2018)
+--------------------
+This version merges Sheref's PR to allow CI using Travis.
+
+There are several changes including:
+
+- Tests are more or less operational but nevertheless work is needed to make them more meaningful (as well as coverage). To disable the tests, set maven skip test flag to ```true``` in the respective POMs:
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+
+- This version now uses PostgreSQL v10+. This is due mainly to better support returning compositions from AQL under
+a (canonical) JSON format. PostgreSQL 10 comes with interesting jsonb functions that makes this part easier since 
+JSON encoding can be partially done at DB level (NB. in the future this encoding shall be totally performed at DB level). The corresponding DB functions are in a flyway migration [script](https://github.com/ethercis/ehrservice/blob/remote-github/db/src/main/resources/db/migration/V5__raw_json_encoding.sql)
+which can be run manually
+
+- To run the tests, it is expected that a DB is installed locally and contains test data. The test data can be restored
+from a [backup file](https://github.com/ethercis/VirtualEhr/blob/master/file_repo/db_test/testdb-pg10.backup). The restore
+can be done using PGAdmin4 (since we use PostgreSQL 10). An easy way to proceed is to CASCADE DELETE schema 'ehr' and perform the restore using pg_restore as described in this [document](https://github.com/ethercis/ethercis/blob/master/doc/DB%20administration.md). Please note that the referential integrity trigger must be disabled. 
+
+The DB installation can be done using the script found [here](https://github.com/ethercis/deploy-n-scripts/blob/master/ethercis-install/v1.1.0/install-db.sh). The install process is described in the [deploy-n-scripts](https://github.com/ethercis/deploy-n-scripts) section.
+
+
+Spring-is-almost-there Edition Feb 2018
+---------------------------------------
+
+##### Changes in library structure
+
+Few changes in the Uber jar generation to remove pesky dependencies on, yet-to-be-removed, org.openehr legacy classes. This has an impact on the classpath of the launch script to hold few more jars not included into the Uber jars anymore. Please note this will be modified soon as we are migrating to a continuous integration framework with Docker image generation.
+
+The changes consists in the following classpath addition in ecis-server script:
+
+```
+${APPLIB}/CompositionTemplate.jar:\
+${APPLIB}/openEHR.v1.Template.jar:\
+${APPLIB}/composition_xml.jar:\
+${APPLIB}/openEHR.v1.OperationalTemplate.jar
+```
+The above libraries have been added to lib/application repository.
+
+The main repository lib/deploy is updated with the latest changes.
+
+##### Operational Template Introspection (CR #74)
+
+A new feature now support OPT introspection. Useful to automate some client UI construct or others. 
+It is also opening the door to further data analytics potential as introspection results can be used to further support complex DB queries. 
+See documentation in [OPT introspection](https://github.com/ethercis/ethercis/blob/master/doc/OPT%20introspection.md "OPT introspection")
+
+##### Full template querying returning a JSON object (CR #73)
+
+This changes allows to get a whole composition from a template in JSON format. 
+
+To integrate this feature, a number of steps are required:
+
+- Migration of PostgreSQL to at least 9.6 (10 is recommended)
+- Installation of the functions supporting JSON encoding at DB level. A script is provided to help in this process. 
+See in [resources/raw_json_encoding](https://github.com/ethercis/ehrservice/tree/remote-github/db/src/main/resources/raw_json_encoding)
+
+In the future, we plan to support most of encoding/retrieval/querying at DB level only (by-passing most of the middleware logic) for performance reason.
+
+##### Multiple fixes and enhancements
+
+Please see the list of closed/in-test CRs for more details.
 
 ## Product/Project Support
 This product /project is supported by the Ripple Foundation, who aim to enhance the EtherCIS solution. 
