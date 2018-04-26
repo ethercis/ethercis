@@ -187,9 +187,9 @@ A participation consists of several complex attributes and is represented sequen
 
 Another terse representation on one line:
 
-	Nurse|1345678::Jessica|face-to-face communication::openehr::216
+	Nurse|1345678::Jessica|openehr::216|face-to-face communication
 
-	function|id:name|mode::terminology::code
+	function|id:name|terminology::code|mode
 
 **Indexes**
 
