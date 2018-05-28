@@ -19,9 +19,7 @@ The following are some kind of pre-announcements and should be considered as ten
 
 - Changes in building EtherCIS and Continuous Integration (merge from [Seref Arikan](https://github.com/serefarikan) great contribution). This will also enable creating Docker images to easily deploy runtime environment.
 - EtherCIS libraries in Maven Central
-- HTTPS support
-- Support of JWT and implementation of authorization (RBAC)
-- Enhancing resultset export (refactoring): JSON, XML, CSV etc.
+- EtherCIS and CDR security
 - AQL enhancements
 	- smart type cast
 	- array querying
