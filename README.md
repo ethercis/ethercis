@@ -129,6 +129,14 @@ Script `populate-concept` is provided to perform this task (see [ethercis/exampl
 3. AQL requires some more DB functions. These can be created by running the migration script [here](https://github.com/ethercis/ehrservice/blob/remote-github/db/src/main/resources/db/migration/v6_aql_v1_2_0.sql). 
 4. Finally, make sure your launch script `ecis-server` references the new libraries.
 
+#### Using JWT
+If you use JWT authentication, you will need to specify the key for verifying a token. The key can be given as a property (not recommended) or in a file. The file format is given [here](https://github.com/ethercis/VirtualEhr/blob/master/VEhrService/src/test/resources/config/security/jwt.cfg).
+
+#### DAC and RLS security at DB level
+This configuration applies whenever JWT authentication is specified and property `server.security.db_role` in `services.properties` is true. This performs a so-called *session impersonation* on the DB connection. 
+
+The impersonation can be prioritized on user id or role. The role impersonation is possibly preferred since the DB privilege definitions is somewhat simpler. However, in a multi-tenancy environment, user based permission must be required. At this time, roles and permissions at DB level require DB administration skills. Documentation on how to perform these operations are described in Postgresql main site: [RLS](https://www.postgresql.org/docs/current/static/ddl-rowsecurity.html), [DAC](https://www.postgresql.org/docs/current/static/user-manag.html) and [MAC](https://www.postgresql.org/docs/current/static/sql-security-label.html) (if required).
+
 ## How To Run It?
 
 - Script `ecis-server` should be adapted to get the right classpath, path to required configuration, network parameters etc.
