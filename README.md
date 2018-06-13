@@ -122,12 +122,17 @@ Script `populate-concept` is provided to perform this task (see [ethercis/exampl
 </body>
 </html>
 
+## Upgrading from 1.1.2 to 1.2.0
+
+1. File `services.properties` needs to be upgraded to use the new features. An example is given in the code base [here](https://github.com/ethercis/VirtualEhr/blob/master/VEhrService/src/test/resources/config/services.properties).
+2. (this step is not required if you are building the application) Table TEMPLATE must be altered to support the fields used by the meta data cache. To do it, run the script in db migration [here](https://github.com/ethercis/ehrservice/blob/remote-github/db/src/main/resources/db/migration/V7_meta_cache.sql). 
+3. AQL requires some more DB functions. These can be created by running the migration script [here](https://github.com/ethercis/ehrservice/blob/remote-github/db/src/main/resources/db/migration/v6_aql_v1_2_0.sql). 
+4. Finally, make sure your launch script `ecis-server` references the new libraries.
+
 ## How To Run It?
 
 - Script `ecis-server` should be adapted to get the right classpath, path to required configuration, network parameters etc.
 - Ditto for all configuration files.
-
-The scripts and configuration samples are in directory `examples` 
 
 Script `ecis-server` uses *uber* jars to keep the modularity of the platform as well as to ease the production of patches. 
 The jars are posted at [libraries](https://github.com/ethercis/ethercis/tree/master/libraries) until a better file repository is identified.
@@ -160,10 +165,6 @@ Was not a CR:
 - REST Server configuration
 - Template Data Cache
 - DAC + row level security (RLS)
-
-Please refer to the following documents for more details on how to upgrade/deploy/configure EtherCIS v1.2.0. 
-
-[TBC]
 
 v1.1.2 (Apr 10 2018)
 --------------------
