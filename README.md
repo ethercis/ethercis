@@ -1,12 +1,20 @@
 Ethercis
 ========
 
-v1.1.2 April 2018
+**v1.2.0 June 2018**
 
 What is it?
 -----------
 
 An [openEHR](http://www.openehr.org/) CDR essentially based on SQL that exposes its services *via* a REST API.
+
+EtherCIS is a truly query-able openEHR CDR; meaning that a wealth of integration capabilities are enabled in 
+a secure way at DB level:
+
+- import/export of clinical data under various formats (SOAP, CSV, JSON etc.)
+- integration with third party reporting applications (Jasper, BI etc.)
+- direct feed from wearables, high throughput data feeds etc.
+- Indexing specific value points (f.e. blood pressure values)
 
 More documentation about the concepts and architecture of EtherCIS is located [here](http://docs.ethercis.org/)
 
@@ -15,23 +23,23 @@ Please also have a look to our [roadmap](https://github.com/ethercis/ethercis/bl
 What's new?
 -----------
 
-- Installation scripts, libraries etc. can be now found into [deploy-n-scripts](https://github.com/ethercis/deploy-n-scripts)
-Windows server scripts example are now also provided.
-- The code based has been refactored to allow enabling tests during build. Please note that many of the tests are
-actually *integration* tests and require a local PostgreSQL 10 installation with a test DB (the test data can 
-be restored from a [backup file](https://github.com/ethercis/VirtualEhr/blob/master/file_repo/db_test/testdb-pg10.backup)
-- Posted a new (a first prelease) of the installation package. It contains scripts and libraries to perform a complete 
-installation of Postgresql 10 and EtherCIS server with preconfiguration of the DB (see below for more details on this)
-It contains also a set of openEHR operational templates to get you started. The package is in the "Releases"
- [section](https://github.com/ethercis/ethercis/releases/tag/v1.1.0-beta). 
- NB. This installation has been tested on CentOS 7 (should work on RHEL 7).
-- Multiple enhancements have been added to this version including a better support of "canonical" JSON whenever
-a whole composition is queried using AQL.
+- Security
+	- JWT authentication
+	- SSL between EtherCIS and clients (NB. postgresql SSL will be done in a next release)
+	- Discretionary Access Control (DAC), multi-tenancy
 
-- To build EtherCIS you will need to separately build the following projects:
-* openehr-java-libs
-* ehrservice
-* VirtualEhr
+- AQL enhancements
+	- Querying list of items is now supported (f.e. list of allergies)
+	- Node name/value predicate
+	- 'Smart' type casting of returned items (f.e. value points as Real, Integer etc.)
+
+- Template data cache: this is now done (partly) at DB level and speed up various operations in particular AQL optimization. 
+
+- REST endpoint now supports much more configuration parameters including SSL, HTTP, CORS, monitoring and logging.          
+
+- Various fixes and enhancements (as expected :)) in particular on Template introspection and RAW Json formatting. Important third party libraries have been upgraded ([jOOQ](https://www.jooq.org/) 3.10, [Jetty](https://www.eclipse.org/jetty/) 9.4.10 and XmlBeans 2.6.0). EtherCIS libraries (Uber jars) have been cleaned up significantly. Also improved or fixed many jUnit tests.
+
+- Please note that we are now exclusively using Maven. Gradle was nice to try but we don't have any resources to deal with multiple build strategies. If you are a Gradle aficionado please feel free to contribute!
 
 Building EtherCIS
 =====
@@ -67,13 +75,15 @@ The core modules are located in the repository [ehrservice](https://github.com/e
 - jooq-pg: utility module, binds ethercis table to jOOQ/Postgresql 9.4
 - transform is mainly used to deal with raw json
 - validation is responsible to check data input in relation to an openEHR template
+- webtemplate implements template introspection
+- db is used to perform DB configuration, upgrade and initial table loading in the case of a first install
 
 **Service Wrappers**
 
 The services and framework are located in [VirtualEhr](https://github.com/ethercis/VirtualEhr)
 
 - `ServiceManager` service management framework
-- `VEhrService` Query gateway of a running instance
+- `VEhrService` Query gateway of a running server instance
 - `ResourceAccessService` a common service to access external resources (DB, knowledge etc.)
 - `PartyIdentifiedService` wrapper to interact with OpenEhr PartyIdentified entities
 - `LogonService` controls user login/logout and sessions
@@ -81,10 +91,13 @@ The services and framework are located in [VirtualEhr](https://github.com/etherc
 - `CacheKnowledgeService` wrapper of knowledge-cache to allow user queries
 - `EhrService` deals with user queries on OpenEhr Ehr and Ehr Status objects
 - `CompositionService` deals with user queries on Composition objects
+- `QueryService` supports AQL/SQL querying
 
 Please refer to the respective component's README for more details on the above
 
 **Database**
+
+EtherCIS requires PostgreSQL 10+.
 
 The database is based on bi-temporal tables keeping records history. 
 See [pgsql_ehr.ddl](https://github.com/ethercis/ehrservice/blob/remote-github/ehrdao/resources/ddls/pgsql_ehr.ddl) 
@@ -102,7 +115,7 @@ Script `populate-concept` is provided to perform this task (see [ethercis/exampl
 <table border="1" style="border-collapse:collapse">
 <tr><td>plpgsql</td><td>1.0</td><td></td></tr>
 <tr><td>jsquery</td><td>1.0</td><td>https://github.com/postgrespro/jsquery</td></tr>
-<tr><td>ltree</td><td>1.0</td><td>https://www.postgresql.org/docs/9.4/static/ltree.html</td></tr>
+<tr><td>ltree</td><td>1.0</td><td>https://www.postgresql.org/docs/9.10/static/ltree.html</td></tr>
 <tr><td>temporal_tables</td><td>1.0.2</td><td>http://pgxn.org/dist/temporal_tables/</td></tr>
 <tr><td>uuid-ossp</td><td>1.0</td><td>https://www.postgresql.org/docs/9.5/static/uuid-ossp.html</td></tr>
 </table>
@@ -132,6 +145,25 @@ In this section you will find:
 
 Changes
 ======
+
+V1.2.0 (Jun 2018)
+-----------------
+
+- Tests, librairies, dependencies: CR#13, CR#14, CR#27, CR#60, CR#61, CR#87, CR#98, CR#123, CR#124
+- Raw Json Support: CR#73, CR#118, CR#119
+- Template Introspection: CR#74, CR#113, CR#114, CR#115, CR#125 
+- AQL enhancements: CR#91, CR#92, CR#95, CR#100, CR#101, CR#111, CR#112, CR#116, CR#121, CR#69, CR#24
+- Security: CR#64, CR#65
+
+Was not a CR:
+
+- REST Server configuration
+- Template Data Cache
+- DAC + row level security (RLS)
+
+Please refer to the following documents for more details on how to upgrade/deploy/configure EtherCIS v1.2.0. 
+
+[TBC]
 
 v1.1.2 (Apr 10 2018)
 --------------------
