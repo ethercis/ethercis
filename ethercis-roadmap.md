@@ -19,13 +19,11 @@ The following are some kind of pre-announcements and should be considered as ten
 
 - Changes in building EtherCIS and Continuous Integration (merge from [Seref Arikan](https://github.com/serefarikan) great contribution). This will also enable creating Docker images to easily deploy runtime environment.
 - EtherCIS libraries in Maven Central
-- HTTPS support
-- Support of JWT and implementation of authorization (RBAC)
-- Enhancing resultset export (refactoring): JSON, XML, CSV etc.
+- EtherCIS and CDR security
 - AQL enhancements
 	- smart type cast
 	- array querying
-	- EXISTS operator
+	- name/value node predicate in path
 
 NB. As of this version, the build tool will be Maven only. The reason is that we simply don't have the resources to deal with multiple build strategy.
 
@@ -36,7 +34,7 @@ NB. As of this version, the build tool will be Maven only. The reason is that we
 - Demographic (RM) support in AQL with DB integration
 - More AQL enhancements (nesting, stored queries, arithmetic, ADL matching)
  	- partial path
-	- named node predicate in path
+	- EXISTS operator
 
 ## EtherCIS v1.4: November 30th, 2018
 
