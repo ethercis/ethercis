@@ -1,3 +1,6 @@
+DEPRECATED Please refer to installing EtherCIS in https://github.com/ethercis/deploy-n-scripts
+---
+
 #Using the EtherCIS VM
 
 ##Preliminary tasks
