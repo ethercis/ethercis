@@ -1,3 +1,7 @@
+DEPRECATED please refer to EtherCIS installation in https://github.com/ethercis/deploy-n-scripts
+---
+
+
 #Installing EtherCIS in a VM  or on a Physical Host 
 This section is an attempt to give step by step instruction to install EtherCIS in a VM (but this can also be used for a physical box). 
 
