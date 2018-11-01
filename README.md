@@ -57,6 +57,18 @@ provides a REST API as described [here](http://docs.ethercis.org/APIs.html)
 PostgreSQL 10 install with the test database loaded). 
 A global setting for the assembly of *uber* jars should be done in your `settings.xml`. 
 
+Note on building with Maven
+---
+Locally, you should install the ‘exotic’ libraries required by Maven. These jars are located in directory ‘libraries’. Local installation can be achieved with the following command for example:
+
+	  mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  
+	      -Dfile=/Development/Dropbox/eCIS_Development/eCIS-LIB/compositionTemplate.jar 
+	      -DgroupId=org.openehr 
+	      -DartifactId=org.openehr.openEHR.v1 
+	      -Dversion=1.0.0 
+	      -Dpackaging=jar 
+	      -DlocalRepositoryPath=/Development/Dropbox/eCIS_Development/eCIS-LIB/local-maven-repo
+
 Project Structure
 ---
 To allow various deployment and integration, the project is partitioned in two parts:
