@@ -59,7 +59,7 @@ A global setting for the assembly of *uber* jars should be done in your `setting
 
 Note on building with Maven
 ---
-Locally, you should install the ‘exotic’ libraries required by Maven. These jars are located in directory ‘libraries’. Local installation can be achieved with the following command for example:
+Locally, you should install the â€˜exoticâ€™ libraries required by Maven. These jars are located in directory â€˜librariesâ€™. Local installation can be achieved with the following command for example:
 
 	  mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  
 	      -Dfile=/Development/Dropbox/eCIS_Development/eCIS-LIB/compositionTemplate.jar 
@@ -165,6 +165,7 @@ In this section you will find:
 - [examples](https://github.com/ethercis/ethercis/tree/master/examples) scripts and configuration files to run ethercis on a Linux box. Scripts can be adapted to launch the server on  Windows if required.
 - [libraries](https://github.com/ethercis/ethercis/tree/master/libraries) some pre-compiled libraries to make life a bit easier (mostly xml bindings classes and one to avoid conflicts with the patches from the core module
 - [installation](https://github.com/ethercis/ethercis/tree/master/installation) documentation and readme's, mostly to install a system
+- [link to deploy scripts](https://github.com/ethercis/deploy-n-scripts) - towards enabling a quick and easy set up
 - [REST API](https://github.com/ethercis/ethercis/blob/master/doc/rest%20api.md) and [FLAT JSON](https://github.com/ethercis/ethercis/blob/master/doc/flat%20json.md)
 - [Composition Serialization and Query](https://github.com/ethercis/ethercis/blob/master/doc/serialization.md)
 
@@ -261,6 +262,10 @@ This product /project is supported by the Ripple Foundation, who aim to enhance 
 We are working to fund as many of the enhancements of EtherCIS as we can based on projects that our non profit organisation supports.
 
 We will try to fix any key bugs and documentation errors ourselves. Other issues, requests for enhancements or feature additions, will be added to the project backlog.
+
+If you have a problem/issue/bug report, please log as an issue on this repo. 
+
+If you want to ask the EtherCIS community a question/discuss an issue, after reading the documentation that is available, please visit our [Gitter chat channel for EtherCIS](https://gitter.im/Ripple-Foundation/EtherCIS)
 
 The Ripple Foundation is committed to offering free and open software, with quality, free and open documentation, but unfortunately is unable to offer free support for all issues/pull requests.
 
