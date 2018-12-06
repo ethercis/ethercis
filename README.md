@@ -162,11 +162,12 @@ Documentation And Examples
 
 In this section you will find:
 
-- [examples](https://github.com/ethercis/ethercis/tree/master/examples) scripts and configuration files to run ethercis on a Linux box. Scripts can be adapted to launch the server on  Windows if required.
-- [libraries](https://github.com/ethercis/ethercis/tree/master/libraries) some pre-compiled libraries to make life a bit easier (mostly xml bindings classes and one to avoid conflicts with the patches from the core module
-- [installation](https://github.com/ethercis/ethercis/tree/master/installation) documentation and readme's, mostly to install a system
-- [link to deploy scripts](https://github.com/ethercis/deploy-n-scripts) - towards enabling a quick and easy set up
-- [REST API](https://github.com/ethercis/ethercis/blob/master/doc/rest%20api.md) and [FLAT JSON](https://github.com/ethercis/ethercis/blob/master/doc/flat%20json.md)
+- [Examples](https://github.com/ethercis/ethercis/tree/master/examples) scripts and configuration files to run ethercis on a Linux box. Scripts can be adapted to launch the server on  Windows if required.
+- [Libraries](https://github.com/ethercis/ethercis/tree/master/libraries) some pre-compiled libraries to make life a bit easier (mostly xml bindings classes and one to avoid conflicts with the patches from the core module
+- [Installation](https://github.com/ethercis/ethercis/tree/master/installation) documentation and readme's, mostly to install a system
+- [Link to deploy scripts](https://github.com/ethercis/deploy-n-scripts) - towards enabling a quick and easy set up
+- [Get authenticated & basic openEHR template list](https://github.com/ethercis/ethercis/blob/master/doc/Getting_%20authenticated_and_templateList_onEthercis.md) - to get authenticated and then the openEHR CDR template list to get started
+- More info on the [REST API](https://github.com/ethercis/ethercis/blob/master/doc/rest%20api.md) and [FLAT JSON](https://github.com/ethercis/ethercis/blob/master/doc/flat%20json.md)
 - [Composition Serialization and Query](https://github.com/ethercis/ethercis/blob/master/doc/serialization.md)
 
 Changes
