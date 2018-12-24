@@ -33,6 +33,11 @@ The actual options used are the following
 
 NB. format **custom** is the recommended format. 
 
+On Windows: 
+
+```
+C:\PostgreSQL\10\bin\pg_dump --username postgres --no-password --format custom --blobs --verbose --file ehr_dump.custom --schema "ehr" "ethercis"
+```
 On a remote server, using from a shell
 
 	 pg_dump --host localhost --port 5432 --username "postgres" --no-password --format custom --blobs --verbose --file ./ethercis-170612.custom.bak --schema "ehr" "ethercis"
