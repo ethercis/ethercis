@@ -201,9 +201,19 @@ Arrays are supported by specifying an index value prefixed by ":", for example:
 
 Or by inserting an array index in the node predicate:
 
-	/items[openEHR-EHR-EVALUATION.reason_for_encounter.v1]/data[at0001]/items[at0002, '#1']:"does not sleep"
-	/items[openEHR-EHR-EVALUATION.reason_for_encounter.v1]/data[at0001]/items[at0002, '#2']:"thinks too much"
-	/items[openEHR-EHR-EVALUATION.reason_for_encounter.v1]/data[at0001]/items[at0002, '#3']:"thinks way too much"
+	/items[openEHR-EHR-EVALUATION.reason_for_encounter.v1]/data[at0001]/items[at0002, '<name/value>#1']:"does not sleep"
+	/items[openEHR-EHR-EVALUATION.reason_for_encounter.v1]/data[at0001]/items[at0002, '<name/value>#2']:"thinks too much"
+	/items[openEHR-EHR-EVALUATION.reason_for_encounter.v1]/data[at0001]/items[at0002, '<name/value>#3']:"thinks way too much"
+	
+For example:
+
+	  "/content[openEHR-EHR-EVALUATION.family_history.v2]/data[at0001]/items[at0003, 'Per family member#1']/items[at0008, 'Clinical history#1']/items[at0009]|value": "hooligan",
+	  "/content[openEHR-EHR-EVALUATION.family_history.v2]/data[at0001]/items[at0003, 'Per family member#1']/items[at0008, 'Clinical history#1']/items[at0010]|value": "P20Y",
+	  "/content[openEHR-EHR-EVALUATION.family_history.v2]/data[at0001]/items[at0003, 'Per family member#1']/items[at0008, 'Clinical history#1']/items[at0012]|value": "violent",
+	  "/content[openEHR-EHR-EVALUATION.family_history.v2]/data[at0001]/items[at0003, 'Per family member#1']/items[at0008, 'Clinical history#2']/items[at0009]|value": "TV addict",
+	  "/content[openEHR-EHR-EVALUATION.family_history.v2]/data[at0001]/items[at0003, 'Per family member#1']/items[at0008, 'Clinical history#2']/items[at0010]|value": "P22Y",
+	  "/content[openEHR-EHR-EVALUATION.family_history.v2]/data[at0001]/items[at0003, 'Per family member#1']/items[at0008, 'Clinical history#2']/items[at0012]|value": "idiosyncratic",
+ 
 
 **Choice**
 The choice is specified by indicating the index of the alternative prefixed by '@', for example:
