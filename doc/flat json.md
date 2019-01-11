@@ -201,9 +201,9 @@ Arrays are supported by specifying an index value prefixed by ":", for example:
 
 Or by inserting an array index in the node predicate:
 
-	/items[openEHR-EHR-EVALUATION.reason_for_encounter.v1]/data[at0001]/items[at0002, #1]:"does not sleep"
-	/items[openEHR-EHR-EVALUATION.reason_for_encounter.v1]/data[at0001]/items[at0002, #2]:"thinks too much"
-	/items[openEHR-EHR-EVALUATION.reason_for_encounter.v1]/data[at0001]/items[at0002, #3]:"thinks way too much"
+	/items[openEHR-EHR-EVALUATION.reason_for_encounter.v1]/data[at0001]/items[at0002, '#1']:"does not sleep"
+	/items[openEHR-EHR-EVALUATION.reason_for_encounter.v1]/data[at0001]/items[at0002, '#2']:"thinks too much"
+	/items[openEHR-EHR-EVALUATION.reason_for_encounter.v1]/data[at0001]/items[at0002, '#3']:"thinks way too much"
 
 **Choice**
 The choice is specified by indicating the index of the alternative prefixed by '@', for example:
