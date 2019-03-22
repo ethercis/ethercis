@@ -1,7 +1,7 @@
 Ethercis
 ========
 
-**v1.2.0 June 2018**
+**v1.3.0 March 2019**
 
 What is it?
 -----------
@@ -22,24 +22,53 @@ Please also have a look to our [roadmap](https://github.com/ethercis/ethercis/bl
 
 What's new?
 -----------
+A number of enhanced features are now mainstream:
 
-- Security
-	- JWT authentication
-	- SSL between EtherCIS and clients (NB. postgresql SSL will be done in a next release)
-	- Discretionary Access Control (DAC), multi-tenancy
+#### JWT authentication
+See https://github.com/ethercis/ethercis/blob/master/doc/JWT.md
 
-- AQL enhancements
-	- Querying list of items is now supported (f.e. list of allergies)
-	- Node name/value predicate
-	- 'Smart' type casting of returned items (f.e. value points as Real, Integer etc.)
+#### HTTP/SSL support and HTTP server configuration
+Background on configuring SSL/Jetty at https://www.eclipse.org/jetty/documentation/current/configuring-ssl.html
+A whole set of configuration parameters are now supported.
+See https://www.eclipse.org/jetty/documentation/9.4.x/quickstart-config-what.html for Jetty configuration explanation.
+See https://github.com/ethercis/deploy-n-scripts/blob/master/ethercis-install/v1.3.0/config/services.properties 
+(section REST SERVER CONFIGURATION) for the actual parameters to use in EtherCIS
 
-- Template data cache: this is now done (partly) at DB level and speed up various operations in particular AQL optimization. 
+#### Enhanced JMX support
+JMX is supported with user defined signature algorithm (see https://github.com/ethercis/ethercis/issues/161)
+In particular, the following service have a better JMX support to use in production:
+ServiceSecurityManager: to reload JWT secret
+All other services: more info + runtime version
 
-- REST endpoint now supports much more configuration parameters including SSL, HTTP, CORS, monitoring and logging.          
+NB. JMX must be activated at JVM level. See https://www.oracle.com/technetwork/java/javaseproducts/mission-control/index.html
+for usage
 
-- Various fixes and enhancements (as expected :)) in particular on Template introspection and RAW Json formatting. Important third party libraries have been upgraded ([jOOQ](https://www.jooq.org/) 3.10, [Jetty](https://www.eclipse.org/jetty/) 9.4.10 and XmlBeans 2.6.0). EtherCIS libraries (Uber jars) have been cleaned up significantly. Also improved or fixed many jUnit tests.
+#### Role Based Permissioning
+This feature is based on Role Impersonation at DB level. This strategy ensures that only users/roles with
+granted rights can access parts of the CDR. This does also support multi-tenancy.
+Understanding of PostreSQL permission framework is given at https://wiki.postgresql.org/wiki/Row-security
+See https://github.com/ethercis/ethercis/blob/master/doc/RLS.md for more on this issue
 
-- Please note that we are now exclusively using Maven. Gradle was nice to try but we don't have any resources to deal with multiple build strategies. If you are a Gradle aficionado please feel free to contribute!
+#### SSL DB Connectivity
+See https://github.com/ethercis/ethercis/blob/master/doc/EtherCIS-SSL.md
+
+#### Library Upgrade
+jOOQ 3.11
+Jetty 9.4
+
+#### Better Build Process
+All build are now self-contained using Maven, that is no more 'exotic' libraries need to be installed locally.
+
+#### Single Jar for Execution
+Support very simple launch command line such as:
+
+```markdown
+java -jar lib/ethercis-1.3.0-SNAPSHOT-runtime.jar -propertyFile config/services.properties
+```
+
+#### GDPR Features
+EHR Erasure: This allows now to delete entirely an EHR using a simple REST DELETE.
+Audit Trail: see log4j.xml and logging.properties in https://github.com/ethercis/deploy-n-scripts/tree/master/ethercis-install/v1.3.0/config
 
 Building EtherCIS
 =====
@@ -55,19 +84,15 @@ provides a REST API as described [here](http://docs.ethercis.org/APIs.html)
 
 - You need to compile each module as indicated in their respective README (mvn clean install, this assumes a local 
 PostgreSQL 10 install with the test database loaded). 
-A global setting for the assembly of *uber* jars should be done in your `settings.xml`. 
+A global setting for the assembly of *uber* jars should be done in your `settings.xml`.
+
+- EtherCIS can be launched with a Fat Executable JAR, see  https://github.com/ethercis/deploy-n-scripts/tree/master/ethercis-install/v1.3.0
+for more details. The Fat jar is provided in this repository as well.
 
 Note on building with Maven
 ---
-Locally, you should install the ‘exotic’ libraries required by Maven. These jars are located in directory ‘libraries’. Local installation can be achieved with the following command for example:
-
-	  mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file  
-	      -Dfile=/Development/Dropbox/eCIS_Development/eCIS-LIB/compositionTemplate.jar 
-	      -DgroupId=org.openehr 
-	      -DartifactId=org.openehr.openEHR.v1 
-	      -Dversion=1.0.0 
-	      -Dpackaging=jar 
-	      -DlocalRepositoryPath=/Development/Dropbox/eCIS_Development/eCIS-LIB/local-maven-repo
+For v1.3.0 all local libraries (e.g. the ones not found in Maven Central or compiled in previous steps) are provided
+there is no need to install them locally
 
 Project Structure
 ---
@@ -107,6 +132,9 @@ The services and framework are located in [VirtualEhr](https://github.com/etherc
 
 Please refer to the respective component's README for more details on the above
 
+**openEHR Java Reference Library**
+The modules used in EtherCIS are in [openehr-java-libs](https://github.com/ethercis/openehr-java-libs)
+
 **Database**
 
 EtherCIS requires PostgreSQL 10+.
@@ -134,12 +162,15 @@ Script `populate-concept` is provided to perform this task (see [ethercis/exampl
 </body>
 </html>
 
-## Upgrading from 1.1.2 to 1.2.0
+####### Setting up the DB with Maven and flyway
+
+See https://github.com/ethercis/ehrservice/tree/remote-github/ecisdb
+
+## Upgrading from 1.2.0 to 1.3.0
 
 1. File `services.properties` needs to be upgraded to use the new features. An example is given in the code base [here](https://github.com/ethercis/VirtualEhr/blob/master/VEhrService/src/test/resources/config/services.properties).
-2. (this step is not required if you are building the application) Table TEMPLATE must be altered to support the fields used by the meta data cache. To do it, run the script in db migration [here](https://github.com/ethercis/ehrservice/blob/remote-github/db/src/main/resources/db/migration/V7_meta_cache.sql). 
-3. AQL requires some more DB functions. These can be created by running the migration script [here](https://github.com/ethercis/ehrservice/blob/remote-github/db/src/main/resources/db/migration/v6_aql_v1_2_0.sql). 
-4. Finally, make sure your launch script `ecis-server` references the new libraries.
+2. Upgrade the DB using flayway https://github.com/ethercis/ehrservice/tree/remote-github/ecisdb
+3. Adapt the launch script using the single Fat JAR created with https://github.com/ethercis/deploy-n-scripts/tree/master/distribution
 
 #### Using JWT
 If you use JWT authentication, you will need to specify the key for verifying a token. The key can be given as a property (not recommended) or in a file. The file format is given [here](https://github.com/ethercis/VirtualEhr/blob/master/VEhrService/src/test/resources/config/security/jwt.cfg).
@@ -172,6 +203,22 @@ In this section you will find:
 
 Changes
 ======
+
+V1.3.0 (March 2019)
+-----------------
+
+- Tests, librairies, dependencies: CR#13, CR#14, CR#27, CR#60, CR#61, CR#87, CR#98, CR#123, CR#124
+- Raw Json Support: CR#73, CR#118, CR#119
+- Template Introspection: CR#74, CR#113, CR#114, CR#115, CR#125 
+- AQL enhancements: CR#91, CR#92, CR#95, CR#100, CR#101, CR#111, CR#112, CR#116, CR#121, CR#69, CR#24
+- Security: CR#64, CR#65
+
+Was not a CR:
+
+- REST Server configuration
+- Template Data Cache
+- DAC + row level security (RLS)
+
 
 V1.2.0 (Jun 2018)
 -----------------
